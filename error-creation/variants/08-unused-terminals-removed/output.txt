@@ -1,0 +1,42 @@
+$ java -jar java-cup-11b.jar -interface -destdir variants/08-unused-terminals-removed/build variants/08-unused-terminals-removed/grammar.cup
+------- CUP v0.11b 20160615 (GIT 4ac7450) Parser Generation Summary -------
+  0 errors and 0 warnings
+  48 terminals, 12 non-terminals, and 62 productions declared, 
+  producing 135 unique parse states.
+  0 terminals declared but not used.
+  0 non-terminals declared but not used.
+  0 productions never reduced.
+  0 conflicts detected (0 expected).
+  Code written to "parser.java", and "sym.java".
+---------------------------------------------------- (CUP v0.11b 20160615 (GIT 4ac7450))
+[exit code 0]
+
+$ java -jar jflex-full-1.8.2.jar --nobak -d variants/08-unused-terminals-removed/build tokens.jflex
+Reading "tokens.jflex"
+Constructing NFA : 290 states in NFA
+Converting NFA to DFA : 
+.....................................................................................................................
+119 states before minimization, 111 states in minimized DFA
+Writing code to "variants/08-unused-terminals-removed/build/Lexer.java"
+[exit code 0]
+
+$ javac --release 11 -cp java-cup-11b.jar -d variants/08-unused-terminals-removed/build <generated sources> ScannerTest.java ast/*.java
+variants/08-unused-terminals-removed/build/Lexer.java:1026: error: cannot find symbol
+            { return newSym(sym.VOID, yytext());
+                               ^
+  symbol:   variable VOID
+  location: interface sym
+variants/08-unused-terminals-removed/build/Lexer.java:1031: error: cannot find symbol
+            { return newSym(sym.CLASS, yytext());
+                               ^
+  symbol:   variable CLASS
+  location: interface sym
+variants/08-unused-terminals-removed/build/Lexer.java:1041: error: cannot find symbol
+            { return newSym(sym.FINAL, yytext());
+                               ^
+  symbol:   variable FINAL
+  location: interface sym
+Note: ScannerTest.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+3 errors
+[exit code 1]

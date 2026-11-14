@@ -1,0 +1,158 @@
+$ java -jar java-cup-11b.jar -interface -destdir variants/10-optionalfinal-as-spec/build variants/10-optionalfinal-as-spec/grammar.cup
+Warning : *** Shift/Reduce conflict found in state #10
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) INT 
+  under symbol INT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #10
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) CHAR 
+  under symbol CHAR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #10
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) BOOL 
+  under symbol BOOL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #10
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) FLOAT 
+  under symbol FLOAT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #38
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) INT 
+  under symbol INT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #38
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) CHAR 
+  under symbol CHAR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #38
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) BOOL 
+  under symbol BOOL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #38
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) FLOAT 
+  under symbol FLOAT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #31
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) INT 
+  under symbol INT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #31
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) CHAR 
+  under symbol CHAR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #31
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) BOOL 
+  under symbol BOOL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #31
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) FLOAT 
+  under symbol FLOAT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #4
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) INT 
+  under symbol INT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #4
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) CHAR 
+  under symbol CHAR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #4
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) BOOL 
+  under symbol BOOL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #4
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) FLOAT 
+  under symbol FLOAT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #172
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) INT 
+  under symbol INT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #172
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) CHAR 
+  under symbol CHAR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #172
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) BOOL 
+  under symbol BOOL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #172
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) FLOAT 
+  under symbol FLOAT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #34
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) INT 
+  under symbol INT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #34
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) CHAR 
+  under symbol CHAR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #34
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) BOOL 
+  under symbol BOOL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #34
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) FLOAT 
+  under symbol FLOAT
+  Resolved in favor of shifting.
+
+Warning : *** Production "Optionalfinal ::= " never reduced
+Error : *** More conflicts encountered than expected -- parser generation aborted
+------- CUP v0.11b 20160615 (GIT 4ac7450) Parser Generation Summary -------
+  1 error and 25 warnings
+  52 terminals, 22 non-terminals, and 82 productions declared, 
+  producing 185 unique parse states.
+  0 terminals declared but not used.
+  0 non-terminals declared but not used.
+  0 productions never reduced.
+  24 conflicts detected (0 expected).
+  No code produced.
+---------------------------------------------------- (CUP v0.11b 20160615 (GIT 4ac7450))
+[exit code 100]

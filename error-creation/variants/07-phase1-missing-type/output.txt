@@ -1,0 +1,13 @@
+$ java -jar java-cup-11b.jar -interface -destdir variants/07-phase1-missing-type/build variants/07-phase1-missing-type/grammar.cup
+Error : java_cup.runtime.Symbol "Type" has not been declared
+------- CUP v0.11b 20160615 (GIT 4ac7450) Parser Generation Summary -------
+  1 error and 0 warnings
+  51 terminals, 11 non-terminals, and 58 productions declared, 
+  producing 0 unique parse states.
+  0 terminals declared but not used.
+  0 non-terminals declared but not used.
+  0 productions never reduced.
+  0 conflicts detected (0 expected).
+  No code produced.
+---------------------------------------------------- (CUP v0.11b 20160615 (GIT 4ac7450))
+[exit code 100]

@@ -3,57 +3,61 @@ JAVAC=javac
 JFLEX=$(JAVA) -jar jflex-full-1.8.2.jar
 CUPJAR=./java-cup-11b.jar
 CUP=$(JAVA) -jar $(CUPJAR)
-CP=.:$(CUPJAR)
 
-TESTDIR = testfiles
-TESTS   = $(basename $(notdir $(wildcard $(TESTDIR)/*.txt)))
+# Both phases share the lexer, the driver and the AST. Only the grammar differs,
+# so each one is generated and compiled into its own directory.
+BUILD = build
+AST   = $(wildcard ast/*.java)
 
 NETID = kxv220016
 NAME  = ky-anh-vo
-PKG   = project01-$(NETID)-$(NAME)
+PKG   = project02-$(NETID)-$(NAME)
 
-default: run
+PHASE ?= 2
 
-.SUFFIXES: $(SUFFIXES) .class .java
+.PHONY: default all phase1 phase2 run test submit clean
 
-.java.class:
-		$(JAVAC) -cp $(CP) $*.java
+default: all
 
-FILE=    Lexer.java      parser.java    sym.java \
-    LexerTest.java
+all: phase1 phase2
 
-run: basicTest.txt
+phase1: $(BUILD)/phase1/.compiled
+phase2: $(BUILD)/phase2/.compiled
 
-.PHONY: default run all clean test submit
+# Usage: make run PHASE=1 FILE=Phase1Tests/Phase1_statements.txt
+run: phase$(PHASE)
+	@$(JAVA) -cp $(BUILD)/phase$(PHASE):$(CUPJAR) ScannerTest $(FILE)
 
 test: all
-	@for t in $(TESTS); do \
-		echo "=== $$t ==="; \
-		$(JAVA) -cp $(CP) LexerTest $(TESTDIR)/$$t.txt > $$t-output.txt; \
-		cat $$t-output.txt; \
+	@for p in 1 2; do \
+		mkdir -p results/phase$$p; \
+		for f in Phase$${p}Tests/*.txt; do \
+			out=results/phase$$p/$$(basename $$f .txt)-output.txt; \
+			echo "=== $$f ==="; \
+			$(JAVA) -cp $(BUILD)/phase$$p:$(CUPJAR) ScannerTest $$f > $$out; \
+			cat $$out; echo; \
+		done; \
 	done
 
 submit: clean test
 	tar -cJf $(PKG).tar.xz \
-		tokens.jflex grammar.cup Makefile LexerTest.java README.md \
-		*.jar testfiles *-output.txt
+		tokens.jflex phase1 phase2 ast ScannerTest.java Makefile README.md errors_and_solutions.pdf \
+		*.jar Phase1Tests/*.txt Phase2Tests/*.txt example_input.txt example_output-1.txt results
 	@echo "Created $(PKG).tar.xz"
 
-all: Lexer.java parser.java $(FILE:java=class)
-
-basicTest.txt: all
-		$(JAVA) -cp $(CP) LexerTest basicTest.txt > basicTest-output.txt
-		cat basicTest.txt
-		cat -n basicTest-output.txt
-
 clean:
-		rm -f *.class *~ *.bak Lexer.java parser.java sym.java *-output.txt
+	rm -rf $(BUILD) results
 
-Lexer.java: tokens.jflex
-		$(JFLEX) tokens.jflex
+$(BUILD)/%/parser.java: %/grammar.cup
+	@mkdir -p $(@D)
+	$(CUP) -interface -destdir $(@D) $<
 
-parser.java: grammar.cup
-		$(CUP) -interface < grammar.cup
+$(BUILD)/%/Lexer.java: tokens.jflex
+	@mkdir -p $(@D)
+	$(JFLEX) --nobak -d $(@D) $<
 
-parserD.java: grammar.cup
-		$(CUP) -interface -dump < grammar.cup
+$(BUILD)/%/.compiled: $(BUILD)/%/parser.java $(BUILD)/%/Lexer.java ScannerTest.java $(AST)
+	$(JAVAC) --release 11 -cp $(CUPJAR) -d $(@D) $(@D)/parser.java $(@D)/sym.java $(@D)/Lexer.java ScannerTest.java $(AST)
+	@touch $@
+
+.PRECIOUS: $(BUILD)/%/parser.java $(BUILD)/%/Lexer.java

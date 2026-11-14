@@ -1,0 +1,20 @@
+$ java -jar java-cup-11b.jar -interface -destdir variants/11-returntype-as-spec/build variants/11-returntype-as-spec/grammar.cup
+Warning : *** Shift/Reduce conflict found in state #5
+  between Returntype ::= Type (*) 
+  and     Fielddecl ::= Type (*) ID LBRACKET INTLIT RBRACKET SEMICOLON 
+  and     Fielddecl ::= Type (*) ID Optionalexpr SEMICOLON 
+  under symbol ID
+  Resolved in favor of shifting.
+
+Error : *** More conflicts encountered than expected -- parser generation aborted
+------- CUP v0.11b 20160615 (GIT 4ac7450) Parser Generation Summary -------
+  1 error and 1 warning
+  52 terminals, 22 non-terminals, and 82 productions declared, 
+  producing 177 unique parse states.
+  0 terminals declared but not used.
+  0 non-terminals declared but not used.
+  0 productions never reduced.
+  1 conflict detected (0 expected).
+  No code produced.
+---------------------------------------------------- (CUP v0.11b 20160615 (GIT 4ac7450))
+[exit code 100]

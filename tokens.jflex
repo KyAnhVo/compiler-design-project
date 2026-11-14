@@ -12,6 +12,16 @@
 import java_cup.runtime.*;
 
 
+/**
+ * Thrown on input that cannot start any token. Line and column are 1-based.
+ */
+class ScannerException extends RuntimeException {
+    ScannerException(String text, int line, int column) {
+        super("Illegal char, '" + text + "' line: " + line + ", column: " + column);
+    }
+}
+
+
 %%
 /*-*
  * LEXICAL FUNCTIONS:
@@ -135,8 +145,8 @@ false           {return newSym(sym.FALSE, yytext());}
 
 /* Literals and Id */
 {id}        {return newSym(sym.ID, yytext());}
-{intlit}    {return newSym(sym.INTLIT, Integer.valueOf(yytext()));}
-{floatlit}  {return newSym(sym.FLOATLIT, Float.valueOf(yytext()));}
+{intlit}    {return newSym(sym.INTLIT, yytext());}
+{floatlit}  {return newSym(sym.FLOATLIT, yytext());}
 {charlit}   {return newSym(sym.CHARLIT, yytext());}
 {strlit}    {return newSym(sym.STRLIT, yytext());}
 
@@ -144,5 +154,4 @@ false           {return newSym(sym.FALSE, yytext());}
 {whitespace}    { /* Ignore whitespace. */ }
 {inlinecomment} { /* Ignore comment. */ }
 {blockcomment}  { /* Ignore block comment. */ }
-.               { System.out.println("Illegal char, '" + yytext() +
-                    "' line: " + yyline + ", column: " + yycolumn); } 
+[^]             { throw new ScannerException(yytext(), yyline + 1, yycolumn + 1); }

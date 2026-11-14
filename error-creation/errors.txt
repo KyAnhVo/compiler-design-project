@@ -1,0 +1,1052 @@
+Summary
+00-control                     cup_exit=0 conflicts=0    javac=ok           runs=1/1 as wanted
+01-binaryop-nonterminal        cup_exit=0 conflicts=0    javac=ok           runs=1/3 as wanted
+02-no-precedence               cup_exit=100 conflicts=192  javac=not reached  runs=not reached
+03-precedence-reversed         cup_exit=0 conflicts=0    javac=ok           runs=0/1 as wanted
+04-unary-no-prec               cup_exit=0 conflicts=0    javac=ok           runs=0/1 as wanted
+05-tilde-no-prec               cup_exit=0 conflicts=0    javac=ok           runs=0/2 as wanted
+06-cast-no-prec                cup_exit=0 conflicts=0    javac=ok           runs=0/2 as wanted
+07-phase1-missing-type         cup_exit=100 conflicts=0    javac=not reached  runs=not reached
+08-unused-terminals-removed    cup_exit=0 conflicts=0    javac=failed (1)   runs=not reached
+09-memberdecls-as-spec         cup_exit=100 conflicts=8    javac=not reached  runs=not reached
+10-optionalfinal-as-spec       cup_exit=100 conflicts=24   javac=not reached  runs=not reached
+11-returntype-as-spec          cup_exit=100 conflicts=1    javac=not reached  runs=not reached
+12-dangling-else               cup_exit=100 conflicts=1    javac=not reached  runs=not reached
+13-numeric-literal-action      cup_exit=0 conflicts=0    javac=failed (1)   runs=not reached
+14-numeric-literal-values      cup_exit=0 conflicts=0    javac=ok           runs=0/3 as wanted
+15-illegal-char-printed        cup_exit=0 conflicts=0    javac=ok           runs=0/1 as wanted
+16-catchall-dot                cup_exit=0 conflicts=0    javac=ok           runs=0/1 as wanted
+
+==============================================================================
+00-control
+Undone: nothing undone
+Phase: 2
+==============================================================================
+
+--- TOOL OUTPUT ---
+$ java -jar java-cup-11b.jar -interface -destdir variants/00-control/build phase2/grammar.cup
+------- CUP v0.11b 20160615 (GIT 4ac7450) Parser Generation Summary -------
+  0 errors and 0 warnings
+  52 terminals, 21 non-terminals, and 81 productions declared, 
+  producing 186 unique parse states.
+  0 terminals declared but not used.
+  0 non-terminals declared but not used.
+  0 productions never reduced.
+  0 conflicts detected (0 expected).
+  Code written to "parser.java", and "sym.java".
+---------------------------------------------------- (CUP v0.11b 20160615 (GIT 4ac7450))
+[exit code 0]
+
+$ java -jar jflex-full-1.8.2.jar --nobak -d variants/00-control/build tokens.jflex
+Reading "tokens.jflex"
+Constructing NFA : 290 states in NFA
+Converting NFA to DFA : 
+.....................................................................................................................
+119 states before minimization, 111 states in minimized DFA
+Writing code to "variants/00-control/build/Lexer.java"
+[exit code 0]
+
+$ javac --release 11 -cp java-cup-11b.jar -d variants/00-control/build <generated sources> ScannerTest.java ast/*.java
+Note: ScannerTest.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+[exit code 0]
+
+--- PROGRAM RUNS ---
+input:    'class c { void m() { x = 1 + 2 * 3; } }'
+wanted:   'class c {\n\tvoid m(){\n\t\tx = (1 + (2 * 3));\n\t}\n}'
+stdout:   'class c {\n\tvoid m(){\n\t\tx = (1 + (2 * 3));\n\t}\n}'
+stderr:   (empty)
+exit:     0
+
+
+==============================================================================
+01-binaryop-nonterminal
+Undone: Binaryop as its own nonterminal
+Phase: 1
+==============================================================================
+
+--- CHANGE (- is the working version, + is the broken version) ---
+--- working/phase1/grammar.cup
++++ broken/phase1/grammar.cup
+@@ -33,2 +33,3 @@
+ non terminal Expr Expr;
++non terminal String Binaryop;
+ non terminal String Type;
+@@ -127,16 +128,10 @@
+        | LPAREN Type:t RPAREN Expr:e {: RESULT = new CastExpr(t, e); :} %prec CAST
+-       | Expr:l MUL Expr:r {: RESULT = new BinaryExpr(l, "*", r); :}
+-       | Expr:l DIV Expr:r {: RESULT = new BinaryExpr(l, "/", r); :}
+-       | Expr:l ADD Expr:r {: RESULT = new BinaryExpr(l, "+", r); :}
+-       | Expr:l SUB Expr:r {: RESULT = new BinaryExpr(l, "-", r); :}
+-       | Expr:l LT Expr:r {: RESULT = new BinaryExpr(l, "<", r); :}
+-       | Expr:l GT Expr:r {: RESULT = new BinaryExpr(l, ">", r); :}
+-       | Expr:l LTE Expr:r {: RESULT = new BinaryExpr(l, "<=", r); :}
+-       | Expr:l GTE Expr:r {: RESULT = new BinaryExpr(l, ">=", r); :}
+-       | Expr:l EQ Expr:r {: RESULT = new BinaryExpr(l, "==", r); :}
+-       | Expr:l LTGT Expr:r {: RESULT = new BinaryExpr(l, "<>", r); :}
+-       | Expr:l LOR Expr:r {: RESULT = new BinaryExpr(l, "||", r); :}
+-       | Expr:l LAND Expr:r {: RESULT = new BinaryExpr(l, "&&", r); :}
++       | Expr:l Binaryop:o Expr:r {: RESULT = new BinaryExpr(l, o, r); :}
+        | LPAREN Expr:c QUESTION_MARK Expr:a COLON Expr:b RPAREN {: RESULT = new TernaryExpr(c, a, b); :}
+        ;
++
++Binaryop ::= MUL {: RESULT = "*"; :} | DIV {: RESULT = "/"; :} | ADD {: RESULT = "+"; :} | SUB {: RESULT = "-"; :}
++           | LT {: RESULT = "<"; :} | GT {: RESULT = ">"; :} | LTE {: RESULT = "<="; :} | GTE {: RESULT = ">="; :}
++           | EQ {: RESULT = "=="; :} | LTGT {: RESULT = "<>"; :} | LOR {: RESULT = "||"; :} | LAND {: RESULT = "&&"; :}
++           ;
+
+--- TOOL OUTPUT ---
+$ java -jar java-cup-11b.jar -interface -destdir variants/01-binaryop-nonterminal/build variants/01-binaryop-nonterminal/grammar.cup
+Warning : Terminal "CLASS" was declared but never used
+Warning : Terminal "VOID" was declared but never used
+Warning : Terminal "FINAL" was declared but never used
+------- CUP v0.11b 20160615 (GIT 4ac7450) Parser Generation Summary -------
+  0 errors and 3 warnings
+  51 terminals, 13 non-terminals, and 63 productions declared, 
+  producing 125 unique parse states.
+  3 terminals declared but not used.
+  0 non-terminals declared but not used.
+  0 productions never reduced.
+  0 conflicts detected (0 expected).
+  Code written to "parser.java", and "sym.java".
+---------------------------------------------------- (CUP v0.11b 20160615 (GIT 4ac7450))
+[exit code 0]
+
+$ java -jar jflex-full-1.8.2.jar --nobak -d variants/01-binaryop-nonterminal/build tokens.jflex
+Reading "tokens.jflex"
+Constructing NFA : 290 states in NFA
+Converting NFA to DFA : 
+.....................................................................................................................
+119 states before minimization, 111 states in minimized DFA
+Writing code to "variants/01-binaryop-nonterminal/build/Lexer.java"
+[exit code 0]
+
+$ javac --release 11 -cp java-cup-11b.jar -d variants/01-binaryop-nonterminal/build <generated sources> ScannerTest.java ast/*.java
+Note: ScannerTest.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+[exit code 0]
+
+--- PROGRAM RUNS ---
+input:    'x = 1 + 2 * 3;'
+wanted:   'x = (1 + (2 * 3));'
+stdout:   'x = (1 + (2 * 3));'
+stderr:   (empty)
+exit:     0
+
+input:    'x = 1 * 2 + 3;'
+wanted:   'x = ((1 * 2) + 3);'
+stdout:   'x = (1 * (2 + 3));'
+stderr:   (empty)
+exit:     0
+
+input:    'x = 1 - 2 - 3;'
+wanted:   'x = ((1 - 2) - 3);'
+stdout:   'x = (1 - (2 - 3));'
+stderr:   (empty)
+exit:     0
+
+
+==============================================================================
+02-no-precedence
+Undone: all precedence declarations removed
+Phase: 1
+==============================================================================
+
+--- CHANGE (- is the working version, + is the broken version) ---
+--- working/phase1/grammar.cup
++++ broken/phase1/grammar.cup
+@@ -40,10 +40,2 @@
+  */
+-precedence left LOR;
+-precedence left LAND;
+-precedence left EQ, LTGT;
+-precedence left LT, GT, LTE, GTE;
+-precedence left ADD, SUB;
+-precedence left MUL, DIV;
+-precedence right CAST;
+-precedence right UNARY;
+ 
+@@ -123,6 +115,6 @@
+        | LPAREN Expr:e RPAREN {: RESULT = new ParenExpr(e); :}
+-       | TILDE Expr:e {: RESULT = new UnaryExpr("~", e); :} %prec UNARY
+-       | SUB Expr:e {: RESULT = new UnaryExpr("-", e); :} %prec UNARY
+-       | ADD Expr:e {: RESULT = new UnaryExpr("+", e); :} %prec UNARY
+-       | LPAREN Type:t RPAREN Expr:e {: RESULT = new CastExpr(t, e); :} %prec CAST
++       | TILDE Expr:e {: RESULT = new UnaryExpr("~", e); :}
++       | SUB Expr:e {: RESULT = new UnaryExpr("-", e); :}
++       | ADD Expr:e {: RESULT = new UnaryExpr("+", e); :}
++       | LPAREN Type:t RPAREN Expr:e {: RESULT = new CastExpr(t, e); :}
+        | Expr:l MUL Expr:r {: RESULT = new BinaryExpr(l, "*", r); :}
+
+--- TOOL OUTPUT ---
+$ java -jar java-cup-11b.jar -interface -destdir variants/02-no-precedence/build variants/02-no-precedence/grammar.cup
+Warning : Terminal "CAST" was declared but never used
+Warning : Terminal "CLASS" was declared but never used
+Warning : Terminal "UNARY" was declared but never used
+Warning : Terminal "VOID" was declared but never used
+Warning : Terminal "FINAL" was declared but never used
+Warning : *** Shift/Reduce conflict found in state #36
+  between Expr ::= LPAREN Type RPAREN Expr (*) 
+  and     Expr ::= Expr (*) ADD Expr 
+  under symbol ADD
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #36
+  between Expr ::= LPAREN Type RPAREN Expr (*) 
+  and     Expr ::= Expr (*) SUB Expr 
+  under symbol SUB
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #36
+  between Expr ::= LPAREN Type RPAREN Expr (*) 
+  and     Expr ::= Expr (*) MUL Expr 
+  under symbol MUL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #36
+  between Expr ::= LPAREN Type RPAREN Expr (*) 
+  and     Expr ::= Expr (*) DIV Expr 
+  under symbol DIV
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #36
+  between Expr ::= LPAREN Type RPAREN Expr (*) 
+  and     Expr ::= Expr (*) LT Expr 
+  under symbol LT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #36
+  between Expr ::= LPAREN Type RPAREN Expr (*) 
+  and     Expr ::= Expr (*) GT Expr 
+  under symbol GT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #36
+  between Expr ::= LPAREN Type RPAREN Expr (*) 
+  and     Expr ::= Expr (*) LTE Expr 
+[... 1125 more lines, full text in the variant's output.txt ...]
+
+
+==============================================================================
+03-precedence-reversed
+Undone: precedence levels declared highest first
+Phase: 1
+==============================================================================
+
+--- CHANGE (- is the working version, + is the broken version) ---
+--- working/phase1/grammar.cup
++++ broken/phase1/grammar.cup
+@@ -40,8 +40,8 @@
+  */
++precedence left MUL, DIV;
++precedence left ADD, SUB;
++precedence left LT, GT, LTE, GTE;
++precedence left EQ, LTGT;
++precedence left LAND;
+ precedence left LOR;
+-precedence left LAND;
+-precedence left EQ, LTGT;
+-precedence left LT, GT, LTE, GTE;
+-precedence left ADD, SUB;
+-precedence left MUL, DIV;
+ precedence right CAST;
+
+--- TOOL OUTPUT ---
+$ java -jar java-cup-11b.jar -interface -destdir variants/03-precedence-reversed/build variants/03-precedence-reversed/grammar.cup
+Warning : Terminal "CLASS" was declared but never used
+Warning : Terminal "VOID" was declared but never used
+Warning : Terminal "FINAL" was declared but never used
+------- CUP v0.11b 20160615 (GIT 4ac7450) Parser Generation Summary -------
+  0 errors and 3 warnings
+  51 terminals, 12 non-terminals, and 62 productions declared, 
+  producing 135 unique parse states.
+  3 terminals declared but not used.
+  0 non-terminals declared but not used.
+  0 productions never reduced.
+  0 conflicts detected (0 expected).
+  Code written to "parser.java", and "sym.java".
+---------------------------------------------------- (CUP v0.11b 20160615 (GIT 4ac7450))
+[exit code 0]
+
+$ java -jar jflex-full-1.8.2.jar --nobak -d variants/03-precedence-reversed/build tokens.jflex
+Reading "tokens.jflex"
+Constructing NFA : 290 states in NFA
+Converting NFA to DFA : 
+.....................................................................................................................
+119 states before minimization, 111 states in minimized DFA
+Writing code to "variants/03-precedence-reversed/build/Lexer.java"
+[exit code 0]
+
+$ javac --release 11 -cp java-cup-11b.jar -d variants/03-precedence-reversed/build <generated sources> ScannerTest.java ast/*.java
+Note: ScannerTest.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+[exit code 0]
+
+--- PROGRAM RUNS ---
+input:    'x = 1 + 2 * 3;'
+wanted:   'x = (1 + (2 * 3));'
+stdout:   'x = ((1 + 2) * 3);'
+stderr:   (empty)
+exit:     0
+
+
+==============================================================================
+04-unary-no-prec
+Undone: %prec UNARY removed from - and +
+Phase: 1
+==============================================================================
+
+--- CHANGE (- is the working version, + is the broken version) ---
+--- working/phase1/grammar.cup
++++ broken/phase1/grammar.cup
+@@ -124,4 +124,4 @@
+        | TILDE Expr:e {: RESULT = new UnaryExpr("~", e); :} %prec UNARY
+-       | SUB Expr:e {: RESULT = new UnaryExpr("-", e); :} %prec UNARY
+-       | ADD Expr:e {: RESULT = new UnaryExpr("+", e); :} %prec UNARY
++       | SUB Expr:e {: RESULT = new UnaryExpr("-", e); :}
++       | ADD Expr:e {: RESULT = new UnaryExpr("+", e); :}
+        | LPAREN Type:t RPAREN Expr:e {: RESULT = new CastExpr(t, e); :} %prec CAST
+
+--- TOOL OUTPUT ---
+$ java -jar java-cup-11b.jar -interface -destdir variants/04-unary-no-prec/build variants/04-unary-no-prec/grammar.cup
+Warning : Terminal "CLASS" was declared but never used
+Warning : Terminal "VOID" was declared but never used
+Warning : Terminal "FINAL" was declared but never used
+------- CUP v0.11b 20160615 (GIT 4ac7450) Parser Generation Summary -------
+  0 errors and 3 warnings
+  51 terminals, 12 non-terminals, and 62 productions declared, 
+  producing 135 unique parse states.
+  3 terminals declared but not used.
+  0 non-terminals declared but not used.
+  0 productions never reduced.
+  0 conflicts detected (0 expected).
+  Code written to "parser.java", and "sym.java".
+---------------------------------------------------- (CUP v0.11b 20160615 (GIT 4ac7450))
+[exit code 0]
+
+$ java -jar jflex-full-1.8.2.jar --nobak -d variants/04-unary-no-prec/build tokens.jflex
+Reading "tokens.jflex"
+Constructing NFA : 290 states in NFA
+Converting NFA to DFA : 
+.....................................................................................................................
+119 states before minimization, 111 states in minimized DFA
+Writing code to "variants/04-unary-no-prec/build/Lexer.java"
+[exit code 0]
+
+$ javac --release 11 -cp java-cup-11b.jar -d variants/04-unary-no-prec/build <generated sources> ScannerTest.java ast/*.java
+Note: ScannerTest.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+[exit code 0]
+
+--- PROGRAM RUNS ---
+input:    'x = -a * b;'
+wanted:   'x = ((-a) * b);'
+stdout:   'x = (-(a * b));'
+stderr:   (empty)
+exit:     0
+
+
+==============================================================================
+05-tilde-no-prec
+Undone: %prec UNARY removed from ~
+Phase: 1
+==============================================================================
+
+--- CHANGE (- is the working version, + is the broken version) ---
+--- working/phase1/grammar.cup
++++ broken/phase1/grammar.cup
+@@ -123,3 +123,3 @@
+        | LPAREN Expr:e RPAREN {: RESULT = new ParenExpr(e); :}
+-       | TILDE Expr:e {: RESULT = new UnaryExpr("~", e); :} %prec UNARY
++       | TILDE Expr:e {: RESULT = new UnaryExpr("~", e); :}
+        | SUB Expr:e {: RESULT = new UnaryExpr("-", e); :} %prec UNARY
+
+--- TOOL OUTPUT ---
+$ java -jar java-cup-11b.jar -interface -destdir variants/05-tilde-no-prec/build variants/05-tilde-no-prec/grammar.cup
+Warning : Terminal "CLASS" was declared but never used
+Warning : Terminal "VOID" was declared but never used
+Warning : Terminal "FINAL" was declared but never used
+------- CUP v0.11b 20160615 (GIT 4ac7450) Parser Generation Summary -------
+  0 errors and 3 warnings
+  51 terminals, 12 non-terminals, and 62 productions declared, 
+  producing 135 unique parse states.
+  3 terminals declared but not used.
+  0 non-terminals declared but not used.
+  0 productions never reduced.
+  0 conflicts detected (0 expected).
+  Code written to "parser.java", and "sym.java".
+---------------------------------------------------- (CUP v0.11b 20160615 (GIT 4ac7450))
+[exit code 0]
+
+$ java -jar jflex-full-1.8.2.jar --nobak -d variants/05-tilde-no-prec/build tokens.jflex
+Reading "tokens.jflex"
+Constructing NFA : 290 states in NFA
+Converting NFA to DFA : 
+.....................................................................................................................
+119 states before minimization, 111 states in minimized DFA
+Writing code to "variants/05-tilde-no-prec/build/Lexer.java"
+[exit code 0]
+
+$ javac --release 11 -cp java-cup-11b.jar -d variants/05-tilde-no-prec/build <generated sources> ScannerTest.java ast/*.java
+Note: ScannerTest.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+[exit code 0]
+
+--- PROGRAM RUNS ---
+input:    'x = ~a * b;'
+wanted:   'x = ((~a) * b);'
+stdout:   'x = (~(a * b));'
+stderr:   (empty)
+exit:     0
+
+input:    'x = ~a + b;'
+wanted:   'x = ((~a) + b);'
+stdout:   'x = (~(a + b));'
+stderr:   (empty)
+exit:     0
+
+
+==============================================================================
+06-cast-no-prec
+Undone: %prec CAST removed
+Phase: 1
+==============================================================================
+
+--- CHANGE (- is the working version, + is the broken version) ---
+--- working/phase1/grammar.cup
++++ broken/phase1/grammar.cup
+@@ -126,3 +126,3 @@
+        | ADD Expr:e {: RESULT = new UnaryExpr("+", e); :} %prec UNARY
+-       | LPAREN Type:t RPAREN Expr:e {: RESULT = new CastExpr(t, e); :} %prec CAST
++       | LPAREN Type:t RPAREN Expr:e {: RESULT = new CastExpr(t, e); :}
+        | Expr:l MUL Expr:r {: RESULT = new BinaryExpr(l, "*", r); :}
+
+--- TOOL OUTPUT ---
+$ java -jar java-cup-11b.jar -interface -destdir variants/06-cast-no-prec/build variants/06-cast-no-prec/grammar.cup
+Warning : Terminal "CAST" was declared but never used
+Warning : Terminal "CLASS" was declared but never used
+Warning : Terminal "VOID" was declared but never used
+Warning : Terminal "FINAL" was declared but never used
+------- CUP v0.11b 20160615 (GIT 4ac7450) Parser Generation Summary -------
+  0 errors and 4 warnings
+  51 terminals, 12 non-terminals, and 62 productions declared, 
+  producing 135 unique parse states.
+  4 terminals declared but not used.
+  0 non-terminals declared but not used.
+  0 productions never reduced.
+  0 conflicts detected (0 expected).
+  Code written to "parser.java", and "sym.java".
+---------------------------------------------------- (CUP v0.11b 20160615 (GIT 4ac7450))
+[exit code 0]
+
+$ java -jar jflex-full-1.8.2.jar --nobak -d variants/06-cast-no-prec/build tokens.jflex
+Reading "tokens.jflex"
+Constructing NFA : 290 states in NFA
+Converting NFA to DFA : 
+.....................................................................................................................
+119 states before minimization, 111 states in minimized DFA
+Writing code to "variants/06-cast-no-prec/build/Lexer.java"
+[exit code 0]
+
+$ javac --release 11 -cp java-cup-11b.jar -d variants/06-cast-no-prec/build <generated sources> ScannerTest.java ast/*.java
+Note: ScannerTest.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+[exit code 0]
+
+--- PROGRAM RUNS ---
+input:    'x = (int)a * b;'
+wanted:   'x = (((int) a) * b);'
+stdout:   'x = ((int) (a * b));'
+stderr:   (empty)
+exit:     0
+
+input:    'x = (int)a + b;'
+wanted:   'x = (((int) a) + b);'
+stdout:   'x = ((int) (a + b));'
+stderr:   (empty)
+exit:     0
+
+
+==============================================================================
+07-phase1-missing-type
+Undone: Type undefined in Phase 1, as in the Phase 1 table of the spec
+Phase: 1
+==============================================================================
+
+--- CHANGE (- is the working version, + is the broken version) ---
+--- working/phase1/grammar.cup
++++ broken/phase1/grammar.cup
+@@ -33,3 +33,2 @@
+ non terminal Expr Expr;
+-non terminal String Type;
+ non terminal Boolean Optionalsemi;
+@@ -142,6 +141 @@
+ 
+-Type ::= INT {: RESULT = "int"; :}
+-       | CHAR {: RESULT = "char"; :}
+-       | BOOL {: RESULT = "bool"; :}
+-       | FLOAT {: RESULT = "float"; :}
+-       ;
+
+--- TOOL OUTPUT ---
+$ java -jar java-cup-11b.jar -interface -destdir variants/07-phase1-missing-type/build variants/07-phase1-missing-type/grammar.cup
+Error : java_cup.runtime.Symbol "Type" has not been declared
+------- CUP v0.11b 20160615 (GIT 4ac7450) Parser Generation Summary -------
+  1 error and 0 warnings
+  51 terminals, 11 non-terminals, and 58 productions declared, 
+  producing 0 unique parse states.
+  0 terminals declared but not used.
+  0 non-terminals declared but not used.
+  0 productions never reduced.
+  0 conflicts detected (0 expected).
+  No code produced.
+---------------------------------------------------- (CUP v0.11b 20160615 (GIT 4ac7450))
+[exit code 100]
+
+
+==============================================================================
+08-unused-terminals-removed
+Undone: CLASS, FINAL, VOID removed from Phase 1 terminals
+Phase: 1
+==============================================================================
+
+--- CHANGE (- is the working version, + is the broken version) ---
+--- working/phase1/grammar.cup
++++ broken/phase1/grammar.cup
+@@ -8,3 +8,3 @@
+ /* Keywords */
+-terminal CLASS, FINAL, VOID, INT, CHAR, BOOL, FLOAT,
++terminal INT, CHAR, BOOL, FLOAT,
+ IF, WHILE, READ, PRINT, PRINTLINE, RETURN, ELSE;
+
+--- TOOL OUTPUT ---
+$ java -jar java-cup-11b.jar -interface -destdir variants/08-unused-terminals-removed/build variants/08-unused-terminals-removed/grammar.cup
+------- CUP v0.11b 20160615 (GIT 4ac7450) Parser Generation Summary -------
+  0 errors and 0 warnings
+  48 terminals, 12 non-terminals, and 62 productions declared, 
+  producing 135 unique parse states.
+  0 terminals declared but not used.
+  0 non-terminals declared but not used.
+  0 productions never reduced.
+  0 conflicts detected (0 expected).
+  Code written to "parser.java", and "sym.java".
+---------------------------------------------------- (CUP v0.11b 20160615 (GIT 4ac7450))
+[exit code 0]
+
+$ java -jar jflex-full-1.8.2.jar --nobak -d variants/08-unused-terminals-removed/build tokens.jflex
+Reading "tokens.jflex"
+Constructing NFA : 290 states in NFA
+Converting NFA to DFA : 
+.....................................................................................................................
+119 states before minimization, 111 states in minimized DFA
+Writing code to "variants/08-unused-terminals-removed/build/Lexer.java"
+[exit code 0]
+
+$ javac --release 11 -cp java-cup-11b.jar -d variants/08-unused-terminals-removed/build <generated sources> ScannerTest.java ast/*.java
+variants/08-unused-terminals-removed/build/Lexer.java:1026: error: cannot find symbol
+            { return newSym(sym.VOID, yytext());
+                               ^
+  symbol:   variable VOID
+  location: interface sym
+variants/08-unused-terminals-removed/build/Lexer.java:1031: error: cannot find symbol
+            { return newSym(sym.CLASS, yytext());
+                               ^
+  symbol:   variable CLASS
+  location: interface sym
+variants/08-unused-terminals-removed/build/Lexer.java:1041: error: cannot find symbol
+            { return newSym(sym.FINAL, yytext());
+                               ^
+  symbol:   variable FINAL
+  location: interface sym
+Note: ScannerTest.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+3 errors
+[exit code 1]
+
+
+==============================================================================
+09-memberdecls-as-spec
+Undone: Memberdecls -> Fielddecls Methoddecls
+Phase: 2
+==============================================================================
+
+--- CHANGE (- is the working version, + is the broken version) ---
+--- working/phase2/grammar.cup
++++ broken/phase2/grammar.cup
+@@ -70,5 +70,3 @@
+  */
+-Memberdecls ::= Fielddecl:f Memberdecls:rest {: rest.addFirst(f); RESULT = rest; :}
+-              | Methoddecls:m {: RESULT = m; :}
+-              ;
++Memberdecls ::= Fielddecls:f Methoddecls:m {: LinkedList<Node> all = new LinkedList<Node>(f); all.addAll(m); RESULT = all; :} ;
+
+--- TOOL OUTPUT ---
+$ java -jar java-cup-11b.jar -interface -destdir variants/09-memberdecls-as-spec/build variants/09-memberdecls-as-spec/grammar.cup
+Warning : *** Shift/Reduce conflict found in state #4
+  between Fielddecls ::= (*) 
+  and     Type ::= (*) INT 
+  under symbol INT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #4
+  between Fielddecls ::= (*) 
+  and     Type ::= (*) CHAR 
+  under symbol CHAR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #4
+  between Fielddecls ::= (*) 
+  and     Type ::= (*) BOOL 
+  under symbol BOOL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #4
+  between Fielddecls ::= (*) 
+  and     Type ::= (*) FLOAT 
+  under symbol FLOAT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #9
+  between Fielddecls ::= (*) 
+  and     Type ::= (*) INT 
+  under symbol INT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #9
+  between Fielddecls ::= (*) 
+  and     Type ::= (*) CHAR 
+  under symbol CHAR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #9
+  between Fielddecls ::= (*) 
+  and     Type ::= (*) BOOL 
+  under symbol BOOL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #9
+  between Fielddecls ::= (*) 
+[... 16 more lines, full text in the variant's output.txt ...]
+
+
+==============================================================================
+10-optionalfinal-as-spec
+Undone: Optionalfinal as its own nonterminal
+Phase: 2
+==============================================================================
+
+--- CHANGE (- is the working version, + is the broken version) ---
+--- working/phase2/grammar.cup
++++ broken/phase2/grammar.cup
+@@ -32,2 +32,3 @@
+ non terminal Expr Optionalexpr;
++non terminal Boolean Optionalfinal;
+ non terminal LinkedList<ArgDecl> Argdecls, ArgdeclList;
+@@ -83,4 +84,5 @@
+ /* Optionalfinal is inlined: reducing it to empty on "int" conflicts with shifting "Type id [ intlit ]" */
+-Fielddecl ::= FINAL Type:t ID:i Optionalexpr:e SEMICOLON {: RESULT = FieldDecl.scalar(true, t, i, e); :}
+-            | Type:t ID:i Optionalexpr:e SEMICOLON {: RESULT = FieldDecl.scalar(false, t, i, e); :}
++Optionalfinal ::= FINAL {: RESULT = true; :} | {: RESULT = false; :} ;
++
++Fielddecl ::= Optionalfinal:o Type:t ID:i Optionalexpr:e SEMICOLON {: RESULT = FieldDecl.scalar(o, t, i, e); :}
+             | Type:t ID:i LBRACKET INTLIT:n RBRACKET SEMICOLON {: RESULT = FieldDecl.array(t, i, n); :}
+
+--- TOOL OUTPUT ---
+$ java -jar java-cup-11b.jar -interface -destdir variants/10-optionalfinal-as-spec/build variants/10-optionalfinal-as-spec/grammar.cup
+Warning : *** Shift/Reduce conflict found in state #10
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) INT 
+  under symbol INT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #10
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) CHAR 
+  under symbol CHAR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #10
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) BOOL 
+  under symbol BOOL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #10
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) FLOAT 
+  under symbol FLOAT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #38
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) INT 
+  under symbol INT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #38
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) CHAR 
+  under symbol CHAR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #38
+  between Optionalfinal ::= (*) 
+  and     Type ::= (*) BOOL 
+  under symbol BOOL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #38
+  between Optionalfinal ::= (*) 
+[... 113 more lines, full text in the variant's output.txt ...]
+
+
+==============================================================================
+11-returntype-as-spec
+Undone: Returntype as its own nonterminal
+Phase: 2
+==============================================================================
+
+--- CHANGE (- is the working version, + is the broken version) ---
+--- working/phase2/grammar.cup
++++ broken/phase2/grammar.cup
+@@ -32,2 +32,3 @@
+ non terminal Expr Optionalexpr;
++non terminal String Returntype;
+ non terminal LinkedList<ArgDecl> Argdecls, ArgdeclList;
+@@ -93,6 +94,6 @@
+ /* Returntype is inlined: reducing it from Type on seeing id conflicts with shifting that id as a field */
+-Methoddecl ::= Type:t ID:i LPAREN Argdecls:a RPAREN LBRACE Fielddecls:f Stmts:s RBRACE Optionalsemi:semi
++Returntype ::= Type:t {: RESULT = t; :} | VOID {: RESULT = "void"; :} ;
++
++Methoddecl ::= Returntype:t ID:i LPAREN Argdecls:a RPAREN LBRACE Fielddecls:f Stmts:s RBRACE Optionalsemi:semi
+                   {: RESULT = new MethodDecl(t, i, a, f, s, semi); :}
+-             | VOID ID:i LPAREN Argdecls:a RPAREN LBRACE Fielddecls:f Stmts:s RBRACE Optionalsemi:semi
+-                  {: RESULT = new MethodDecl("void", i, a, f, s, semi); :}
+              ;
+
+--- TOOL OUTPUT ---
+$ java -jar java-cup-11b.jar -interface -destdir variants/11-returntype-as-spec/build variants/11-returntype-as-spec/grammar.cup
+Warning : *** Shift/Reduce conflict found in state #5
+  between Returntype ::= Type (*) 
+  and     Fielddecl ::= Type (*) ID LBRACKET INTLIT RBRACKET SEMICOLON 
+  and     Fielddecl ::= Type (*) ID Optionalexpr SEMICOLON 
+  under symbol ID
+  Resolved in favor of shifting.
+
+Error : *** More conflicts encountered than expected -- parser generation aborted
+------- CUP v0.11b 20160615 (GIT 4ac7450) Parser Generation Summary -------
+  1 error and 1 warning
+  52 terminals, 22 non-terminals, and 82 productions declared, 
+  producing 177 unique parse states.
+  0 terminals declared but not used.
+  0 non-terminals declared but not used.
+  0 productions never reduced.
+  1 conflict detected (0 expected).
+  No code produced.
+---------------------------------------------------- (CUP v0.11b 20160615 (GIT 4ac7450))
+[exit code 100]
+
+
+==============================================================================
+12-dangling-else
+Undone: NO_ELSE precedence removed from IfEnd
+Phase: 2
+==============================================================================
+
+--- CHANGE (- is the working version, + is the broken version) ---
+--- working/phase2/grammar.cup
++++ broken/phase2/grammar.cup
+@@ -24,3 +24,3 @@
+ /* Never returned by the lexer, only used to name precedence levels */
+-terminal CAST, UNARY, NO_ELSE;
++terminal CAST, UNARY;
+ 
+@@ -49,4 +49,2 @@
+  */
+-precedence nonassoc NO_ELSE;
+-precedence nonassoc ELSE;
+ precedence left LOR;
+@@ -144,3 +142,3 @@
+ IfEnd ::= ELSE Stmt:s {: RESULT = s; :}
+-        | {: RESULT = null; :} %prec NO_ELSE
++        | {: RESULT = null; :}
+         ;
+
+--- TOOL OUTPUT ---
+$ java -jar java-cup-11b.jar -interface -destdir variants/12-dangling-else/build variants/12-dangling-else/grammar.cup
+Warning : *** Shift/Reduce conflict found in state #132
+  between IfEnd ::= (*) 
+  and     IfEnd ::= (*) ELSE Stmt 
+  under symbol ELSE
+  Resolved in favor of shifting.
+
+Error : *** More conflicts encountered than expected -- parser generation aborted
+------- CUP v0.11b 20160615 (GIT 4ac7450) Parser Generation Summary -------
+  1 error and 1 warning
+  51 terminals, 21 non-terminals, and 81 productions declared, 
+  producing 186 unique parse states.
+  0 terminals declared but not used.
+  0 non-terminals declared but not used.
+  0 productions never reduced.
+  1 conflict detected (0 expected).
+  No code produced.
+---------------------------------------------------- (CUP v0.11b 20160615 (GIT 4ac7450))
+[exit code 100]
+
+
+==============================================================================
+13-numeric-literal-action
+Undone: INTLIT/FLOATLIT typed Integer/Float, actions unchanged
+Phase: 1
+==============================================================================
+
+--- CHANGE (- is the working version, + is the broken version) ---
+--- working/phase1/grammar.cup
++++ broken/phase1/grammar.cup
+@@ -20,3 +20,5 @@
+ /* ID and literals */
+-terminal String ID, STRLIT, CHARLIT, INTLIT, FLOATLIT;
++terminal String ID, STRLIT, CHARLIT;
++terminal Integer INTLIT;
++terminal Float FLOATLIT;
+ terminal TRUE, FALSE; /* bool lit */
+--- working/tokens.jflex
++++ broken/tokens.jflex
+@@ -147,4 +147,4 @@
+ {id}        {return newSym(sym.ID, yytext());}
+-{intlit}    {return newSym(sym.INTLIT, yytext());}
+-{floatlit}  {return newSym(sym.FLOATLIT, yytext());}
++{intlit}    {return newSym(sym.INTLIT, Integer.valueOf(yytext()));}
++{floatlit}  {return newSym(sym.FLOATLIT, Float.valueOf(yytext()));}
+ {charlit}   {return newSym(sym.CHARLIT, yytext());}
+
+--- TOOL OUTPUT ---
+$ java -jar java-cup-11b.jar -interface -destdir variants/13-numeric-literal-action/build variants/13-numeric-literal-action/grammar.cup
+Warning : Terminal "CLASS" was declared but never used
+Warning : Terminal "VOID" was declared but never used
+Warning : Terminal "FINAL" was declared but never used
+------- CUP v0.11b 20160615 (GIT 4ac7450) Parser Generation Summary -------
+  0 errors and 3 warnings
+  51 terminals, 12 non-terminals, and 62 productions declared, 
+  producing 135 unique parse states.
+  3 terminals declared but not used.
+  0 non-terminals declared but not used.
+  0 productions never reduced.
+  0 conflicts detected (0 expected).
+  Code written to "parser.java", and "sym.java".
+---------------------------------------------------- (CUP v0.11b 20160615 (GIT 4ac7450))
+[exit code 0]
+
+$ java -jar jflex-full-1.8.2.jar --nobak -d variants/13-numeric-literal-action/build variants/13-numeric-literal-action/tokens.jflex
+Reading "variants/13-numeric-literal-action/tokens.jflex"
+Constructing NFA : 290 states in NFA
+Converting NFA to DFA : 
+.....................................................................................................................
+119 states before minimization, 111 states in minimized DFA
+Writing code to "variants/13-numeric-literal-action/build/Lexer.java"
+[exit code 0]
+
+$ javac --release 11 -cp java-cup-11b.jar -d variants/13-numeric-literal-action/build <generated sources> ScannerTest.java ast/*.java
+variants/13-numeric-literal-action/build/parser.java:859: error: incompatible types: Integer cannot be converted to String
+		 RESULT = new Literal(l); 
+		                      ^
+variants/13-numeric-literal-action/build/parser.java:895: error: incompatible types: Float cannot be converted to String
+		 RESULT = new Literal(l); 
+		                      ^
+Note: ScannerTest.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some messages have been simplified; recompile with -Xdiags:verbose to get full output
+2 errors
+[exit code 1]
+
+
+==============================================================================
+14-numeric-literal-values
+Undone: INTLIT/FLOATLIT typed Integer/Float, converted with String.valueOf
+Phase: 1
+==============================================================================
+
+--- CHANGE (- is the working version, + is the broken version) ---
+--- working/phase1/grammar.cup
++++ broken/phase1/grammar.cup
+@@ -20,3 +20,5 @@
+ /* ID and literals */
+-terminal String ID, STRLIT, CHARLIT, INTLIT, FLOATLIT;
++terminal String ID, STRLIT, CHARLIT;
++terminal Integer INTLIT;
++terminal Float FLOATLIT;
+ terminal TRUE, FALSE; /* bool lit */
+@@ -116,6 +118,6 @@
+        | ID:i LPAREN Args:a RPAREN {: RESULT = new CallExpr(i, a); :}
+-       | INTLIT:l {: RESULT = new Literal(l); :}
++       | INTLIT:l {: RESULT = new Literal(String.valueOf(l)); :}
+        | CHARLIT:l {: RESULT = new Literal(l); :}
+        | STRLIT:l {: RESULT = new Literal(l); :}
+-       | FLOATLIT:l {: RESULT = new Literal(l); :}
++       | FLOATLIT:l {: RESULT = new Literal(String.valueOf(l)); :}
+        | TRUE {: RESULT = new Literal("true"); :}
+--- working/tokens.jflex
++++ broken/tokens.jflex
+@@ -147,4 +147,4 @@
+ {id}        {return newSym(sym.ID, yytext());}
+-{intlit}    {return newSym(sym.INTLIT, yytext());}
+-{floatlit}  {return newSym(sym.FLOATLIT, yytext());}
++{intlit}    {return newSym(sym.INTLIT, Integer.valueOf(yytext()));}
++{floatlit}  {return newSym(sym.FLOATLIT, Float.valueOf(yytext()));}
+ {charlit}   {return newSym(sym.CHARLIT, yytext());}
+
+--- TOOL OUTPUT ---
+$ java -jar java-cup-11b.jar -interface -destdir variants/14-numeric-literal-values/build variants/14-numeric-literal-values/grammar.cup
+Warning : Terminal "CLASS" was declared but never used
+Warning : Terminal "VOID" was declared but never used
+Warning : Terminal "FINAL" was declared but never used
+------- CUP v0.11b 20160615 (GIT 4ac7450) Parser Generation Summary -------
+  0 errors and 3 warnings
+  51 terminals, 12 non-terminals, and 62 productions declared, 
+  producing 135 unique parse states.
+  3 terminals declared but not used.
+  0 non-terminals declared but not used.
+  0 productions never reduced.
+  0 conflicts detected (0 expected).
+  Code written to "parser.java", and "sym.java".
+---------------------------------------------------- (CUP v0.11b 20160615 (GIT 4ac7450))
+[exit code 0]
+
+$ java -jar jflex-full-1.8.2.jar --nobak -d variants/14-numeric-literal-values/build variants/14-numeric-literal-values/tokens.jflex
+Reading "variants/14-numeric-literal-values/tokens.jflex"
+Constructing NFA : 290 states in NFA
+Converting NFA to DFA : 
+.....................................................................................................................
+119 states before minimization, 111 states in minimized DFA
+Writing code to "variants/14-numeric-literal-values/build/Lexer.java"
+[exit code 0]
+
+$ javac --release 11 -cp java-cup-11b.jar -d variants/14-numeric-literal-values/build <generated sources> ScannerTest.java ast/*.java
+Note: ScannerTest.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+[exit code 0]
+
+--- PROGRAM RUNS ---
+input:    'x = 123456789.0;'
+wanted:   'x = 123456789.0;'
+stdout:   'x = 1.2345679E8;'
+stderr:   (empty)
+exit:     0
+
+input:    'x = 1.10;'
+wanted:   'x = 1.10;'
+stdout:   'x = 1.1;'
+stderr:   (empty)
+exit:     0
+
+input:    'x = 99999999999;'
+wanted:   'x = 99999999999;'
+stdout:   ''
+stderr:   java.lang.NumberFormatException: For input string: "99999999999"
+exit:     0
+
+
+==============================================================================
+15-illegal-char-printed
+Undone: illegal char printed and skipped instead of thrown
+Phase: 1
+==============================================================================
+
+--- CHANGE (- is the working version, + is the broken version) ---
+--- working/tokens.jflex
++++ broken/tokens.jflex
+@@ -156,2 +156,2 @@
+ {blockcomment}  { /* Ignore block comment. */ }
+-[^]             { throw new ScannerException(yytext(), yyline + 1, yycolumn + 1); }
++.               { System.out.println("Illegal char, '" + yytext() + "' line: " + yyline + ", column: " + yycolumn); }
+
+--- TOOL OUTPUT ---
+$ java -jar java-cup-11b.jar -interface -destdir variants/15-illegal-char-printed/build phase1/grammar.cup
+Warning : Terminal "CLASS" was declared but never used
+Warning : Terminal "VOID" was declared but never used
+Warning : Terminal "FINAL" was declared but never used
+------- CUP v0.11b 20160615 (GIT 4ac7450) Parser Generation Summary -------
+  0 errors and 3 warnings
+  51 terminals, 12 non-terminals, and 62 productions declared, 
+  producing 135 unique parse states.
+  3 terminals declared but not used.
+  0 non-terminals declared but not used.
+  0 productions never reduced.
+  0 conflicts detected (0 expected).
+  Code written to "parser.java", and "sym.java".
+---------------------------------------------------- (CUP v0.11b 20160615 (GIT 4ac7450))
+[exit code 0]
+
+$ java -jar jflex-full-1.8.2.jar --nobak -d variants/15-illegal-char-printed/build variants/15-illegal-char-printed/tokens.jflex
+Reading "variants/15-illegal-char-printed/tokens.jflex"
+Constructing NFA : 290 states in NFA
+Converting NFA to DFA : 
+......................................................................................................................
+120 states before minimization, 111 states in minimized DFA
+Writing code to "variants/15-illegal-char-printed/build/Lexer.java"
+[exit code 0]
+
+$ javac --release 11 -cp java-cup-11b.jar -d variants/15-illegal-char-printed/build <generated sources> ScannerTest.java ast/*.java
+Note: ScannerTest.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+[exit code 0]
+
+--- PROGRAM RUNS ---
+input:    'x = 1 # ;'
+wanted:   '(no stdout, ScannerException on stderr)'
+stdout:   "Illegal char, '#' line: 0, column: 6\nx = 1;"
+stderr:   (empty)
+exit:     0
+
+
+==============================================================================
+16-catchall-dot
+Undone: catch-all rule written as . instead of [^]
+Phase: 1
+==============================================================================
+
+--- CHANGE (- is the working version, + is the broken version) ---
+--- working/tokens.jflex
++++ broken/tokens.jflex
+@@ -156,2 +156,2 @@
+ {blockcomment}  { /* Ignore block comment. */ }
+-[^]             { throw new ScannerException(yytext(), yyline + 1, yycolumn + 1); }
++.               { throw new ScannerException(yytext(), yyline + 1, yycolumn + 1); }
+
+--- TOOL OUTPUT ---
+$ java -jar java-cup-11b.jar -interface -destdir variants/16-catchall-dot/build phase1/grammar.cup
+Warning : Terminal "CLASS" was declared but never used
+Warning : Terminal "VOID" was declared but never used
+Warning : Terminal "FINAL" was declared but never used
+------- CUP v0.11b 20160615 (GIT 4ac7450) Parser Generation Summary -------
+  0 errors and 3 warnings
+  51 terminals, 12 non-terminals, and 62 productions declared, 
+  producing 135 unique parse states.
+  3 terminals declared but not used.
+  0 non-terminals declared but not used.
+  0 productions never reduced.
+  0 conflicts detected (0 expected).
+  Code written to "parser.java", and "sym.java".
+---------------------------------------------------- (CUP v0.11b 20160615 (GIT 4ac7450))
+[exit code 0]
+
+$ java -jar jflex-full-1.8.2.jar --nobak -d variants/16-catchall-dot/build variants/16-catchall-dot/tokens.jflex
+Reading "variants/16-catchall-dot/tokens.jflex"
+Constructing NFA : 290 states in NFA
+Converting NFA to DFA : 
+......................................................................................................................
+120 states before minimization, 111 states in minimized DFA
+Writing code to "variants/16-catchall-dot/build/Lexer.java"
+[exit code 0]
+
+$ javac --release 11 -cp java-cup-11b.jar -d variants/16-catchall-dot/build <generated sources> ScannerTest.java ast/*.java
+Note: ScannerTest.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+[exit code 0]
+
+--- PROGRAM RUNS ---
+input:    'x = 1;\x0c'
+wanted:   '(no stdout, ScannerException on stderr)'
+stdout:   ''
+stderr:   Exception in thread "main" java.lang.Error: Error: could not match input
+exit:     1

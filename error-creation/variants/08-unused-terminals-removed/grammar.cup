@@ -1,0 +1,147 @@
+import java_cup.runtime.*;
+import java.util.LinkedList;
+
+/**
+Place Terminals Here
+*/
+
+/* Keywords */
+terminal INT, CHAR, BOOL, FLOAT,
+IF, WHILE, READ, PRINT, PRINTLINE, RETURN, ELSE;
+
+/* Brace, bracket, paren */
+terminal LBRACE, RBRACE, LBRACKET, RBRACKET, LPAREN, RPAREN;
+
+/* Operators and Punctuations (I think) */
+terminal SEMICOLON, INCREMENT, DECREMENT, ASSIGN, COMMA,
+QUESTION_MARK, COLON, TILDE, ADD, SUB, MUL, DIV, 
+LT, GT, LTE, GTE, EQ, LTGT, LOR, LAND;
+
+/* ID and literals */
+terminal String ID, STRLIT, CHARLIT, INTLIT, FLOATLIT;
+terminal TRUE, FALSE; /* bool lit */
+
+/* Never returned by the lexer, only used to name precedence levels */
+terminal CAST, UNARY;
+
+non terminal Program Program;
+non terminal LinkedList<Stmt> Stmts;
+non terminal Stmt Stmt, IfEnd;
+non terminal Name Name;
+non terminal LinkedList<Expr> Args, Printlist, Printlinelist;
+non terminal LinkedList<Name> Readlist;
+non terminal Expr Expr;
+non terminal String Type;
+non terminal Boolean Optionalsemi;
+
+/*
+ * Lowest to highest. Binaryop is inlined into Expr below: CUP takes a rule's
+ * precedence from its last terminal, and "Expr Binaryop Expr" would have none.
+ */
+precedence left LOR;
+precedence left LAND;
+precedence left EQ, LTGT;
+precedence left LT, GT, LTE, GTE;
+precedence left ADD, SUB;
+precedence left MUL, DIV;
+precedence right CAST;
+precedence right UNARY;
+
+start with Program;
+
+Program ::= Stmts:s {: RESULT = new StmtsProgram(s); :} ;
+
+Stmts ::= Stmt:s Stmts:rest {: rest.addFirst(s); RESULT = rest; :}
+        | {: RESULT = new LinkedList<Stmt>(); :}
+        ;
+
+Stmt ::= IF LPAREN Expr:c RPAREN LBRACE Stmts:s RBRACE IfEnd:e
+            {: RESULT = new IfStmt(c, new Block(s, false), e); :}
+       | WHILE LPAREN Expr:c RPAREN LBRACE Stmts:s RBRACE
+            {: RESULT = new WhileStmt(c, new Block(s, false)); :}
+       | Name:n ASSIGN Expr:e SEMICOLON
+            {: RESULT = new AssignStmt(n, e); :}
+       | READ LPAREN Readlist:l RPAREN SEMICOLON
+            {: RESULT = new IoStmt("read", l); :}
+       | PRINT LPAREN Printlist:l RPAREN SEMICOLON
+            {: RESULT = new IoStmt("print", l); :}
+       | PRINTLINE LPAREN Printlinelist:l RPAREN SEMICOLON
+            {: RESULT = new IoStmt("printline", l); :}
+       | ID:i LPAREN RPAREN SEMICOLON
+            {: RESULT = new CallStmt(new CallExpr(i, new LinkedList<Expr>())); :}
+       | ID:i LPAREN Args:a RPAREN SEMICOLON
+            {: RESULT = new CallStmt(new CallExpr(i, a)); :}
+       | RETURN SEMICOLON
+            {: RESULT = new ReturnStmt(null); :}
+       | RETURN Expr:e SEMICOLON
+            {: RESULT = new ReturnStmt(e); :}
+       | Name:n INCREMENT SEMICOLON
+            {: RESULT = new IncDecStmt(n, "++"); :}
+       | Name:n DECREMENT SEMICOLON
+            {: RESULT = new IncDecStmt(n, "--"); :}
+       | LBRACE Stmts:s RBRACE Optionalsemi:semi
+            {: RESULT = new Block(s, semi); :}
+       ;
+
+IfEnd ::= ELSE LBRACE Stmts:s RBRACE {: RESULT = new Block(s, false); :}
+        | {: RESULT = null; :}
+        ;
+
+Optionalsemi ::= SEMICOLON {: RESULT = true; :}
+               | {: RESULT = false; :}
+               ;
+
+Name ::= ID:i {: RESULT = new Name(i, null); :}
+       | ID:i LBRACKET Expr:e RBRACKET {: RESULT = new Name(i, e); :}
+       ;
+
+Args ::= Expr:e COMMA Args:rest {: rest.addFirst(e); RESULT = rest; :}
+       | Expr:e {: RESULT = new LinkedList<Expr>(); RESULT.add(e); :}
+       ;
+
+Readlist ::= Name:n COMMA Readlist:rest {: rest.addFirst(n); RESULT = rest; :}
+           | Name:n {: RESULT = new LinkedList<Name>(); RESULT.add(n); :}
+           ;
+
+Printlist ::= Expr:e COMMA Printlist:rest {: rest.addFirst(e); RESULT = rest; :}
+            | Expr:e {: RESULT = new LinkedList<Expr>(); RESULT.add(e); :}
+            ;
+
+Printlinelist ::= Printlist:l {: RESULT = l; :}
+                | {: RESULT = new LinkedList<Expr>(); :}
+                ;
+
+Expr ::= Name:n {: RESULT = n; :}
+       | ID:i LPAREN RPAREN {: RESULT = new CallExpr(i, new LinkedList<Expr>()); :}
+       | ID:i LPAREN Args:a RPAREN {: RESULT = new CallExpr(i, a); :}
+       | INTLIT:l {: RESULT = new Literal(l); :}
+       | CHARLIT:l {: RESULT = new Literal(l); :}
+       | STRLIT:l {: RESULT = new Literal(l); :}
+       | FLOATLIT:l {: RESULT = new Literal(l); :}
+       | TRUE {: RESULT = new Literal("true"); :}
+       | FALSE {: RESULT = new Literal("false"); :}
+       | LPAREN Expr:e RPAREN {: RESULT = new ParenExpr(e); :}
+       | TILDE Expr:e {: RESULT = new UnaryExpr("~", e); :} %prec UNARY
+       | SUB Expr:e {: RESULT = new UnaryExpr("-", e); :} %prec UNARY
+       | ADD Expr:e {: RESULT = new UnaryExpr("+", e); :} %prec UNARY
+       | LPAREN Type:t RPAREN Expr:e {: RESULT = new CastExpr(t, e); :} %prec CAST
+       | Expr:l MUL Expr:r {: RESULT = new BinaryExpr(l, "*", r); :}
+       | Expr:l DIV Expr:r {: RESULT = new BinaryExpr(l, "/", r); :}
+       | Expr:l ADD Expr:r {: RESULT = new BinaryExpr(l, "+", r); :}
+       | Expr:l SUB Expr:r {: RESULT = new BinaryExpr(l, "-", r); :}
+       | Expr:l LT Expr:r {: RESULT = new BinaryExpr(l, "<", r); :}
+       | Expr:l GT Expr:r {: RESULT = new BinaryExpr(l, ">", r); :}
+       | Expr:l LTE Expr:r {: RESULT = new BinaryExpr(l, "<=", r); :}
+       | Expr:l GTE Expr:r {: RESULT = new BinaryExpr(l, ">=", r); :}
+       | Expr:l EQ Expr:r {: RESULT = new BinaryExpr(l, "==", r); :}
+       | Expr:l LTGT Expr:r {: RESULT = new BinaryExpr(l, "<>", r); :}
+       | Expr:l LOR Expr:r {: RESULT = new BinaryExpr(l, "||", r); :}
+       | Expr:l LAND Expr:r {: RESULT = new BinaryExpr(l, "&&", r); :}
+       | LPAREN Expr:c QUESTION_MARK Expr:a COLON Expr:b RPAREN {: RESULT = new TernaryExpr(c, a, b); :}
+       ;
+
+Type ::= INT {: RESULT = "int"; :}
+       | CHAR {: RESULT = "char"; :}
+       | BOOL {: RESULT = "bool"; :}
+       | FLOAT {: RESULT = "float"; :}
+       ;

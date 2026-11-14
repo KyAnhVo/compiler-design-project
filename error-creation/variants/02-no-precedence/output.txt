@@ -1,0 +1,1170 @@
+$ java -jar java-cup-11b.jar -interface -destdir variants/02-no-precedence/build variants/02-no-precedence/grammar.cup
+Warning : Terminal "CAST" was declared but never used
+Warning : Terminal "CLASS" was declared but never used
+Warning : Terminal "UNARY" was declared but never used
+Warning : Terminal "VOID" was declared but never used
+Warning : Terminal "FINAL" was declared but never used
+Warning : *** Shift/Reduce conflict found in state #36
+  between Expr ::= LPAREN Type RPAREN Expr (*) 
+  and     Expr ::= Expr (*) ADD Expr 
+  under symbol ADD
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #36
+  between Expr ::= LPAREN Type RPAREN Expr (*) 
+  and     Expr ::= Expr (*) SUB Expr 
+  under symbol SUB
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #36
+  between Expr ::= LPAREN Type RPAREN Expr (*) 
+  and     Expr ::= Expr (*) MUL Expr 
+  under symbol MUL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #36
+  between Expr ::= LPAREN Type RPAREN Expr (*) 
+  and     Expr ::= Expr (*) DIV Expr 
+  under symbol DIV
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #36
+  between Expr ::= LPAREN Type RPAREN Expr (*) 
+  and     Expr ::= Expr (*) LT Expr 
+  under symbol LT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #36
+  between Expr ::= LPAREN Type RPAREN Expr (*) 
+  and     Expr ::= Expr (*) GT Expr 
+  under symbol GT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #36
+  between Expr ::= LPAREN Type RPAREN Expr (*) 
+  and     Expr ::= Expr (*) LTE Expr 
+  under symbol LTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #36
+  between Expr ::= LPAREN Type RPAREN Expr (*) 
+  and     Expr ::= Expr (*) GTE Expr 
+  under symbol GTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #36
+  between Expr ::= LPAREN Type RPAREN Expr (*) 
+  and     Expr ::= Expr (*) EQ Expr 
+  under symbol EQ
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #36
+  between Expr ::= LPAREN Type RPAREN Expr (*) 
+  and     Expr ::= Expr (*) LTGT Expr 
+  under symbol LTGT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #36
+  between Expr ::= LPAREN Type RPAREN Expr (*) 
+  and     Expr ::= Expr (*) LOR Expr 
+  under symbol LOR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #36
+  between Expr ::= LPAREN Type RPAREN Expr (*) 
+  and     Expr ::= Expr (*) LAND Expr 
+  under symbol LAND
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #55
+  between Expr ::= Expr EQ Expr (*) 
+  and     Expr ::= Expr (*) ADD Expr 
+  under symbol ADD
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #55
+  between Expr ::= Expr EQ Expr (*) 
+  and     Expr ::= Expr (*) SUB Expr 
+  under symbol SUB
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #55
+  between Expr ::= Expr EQ Expr (*) 
+  and     Expr ::= Expr (*) MUL Expr 
+  under symbol MUL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #55
+  between Expr ::= Expr EQ Expr (*) 
+  and     Expr ::= Expr (*) DIV Expr 
+  under symbol DIV
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #55
+  between Expr ::= Expr EQ Expr (*) 
+  and     Expr ::= Expr (*) LT Expr 
+  under symbol LT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #55
+  between Expr ::= Expr EQ Expr (*) 
+  and     Expr ::= Expr (*) GT Expr 
+  under symbol GT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #55
+  between Expr ::= Expr EQ Expr (*) 
+  and     Expr ::= Expr (*) LTE Expr 
+  under symbol LTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #55
+  between Expr ::= Expr EQ Expr (*) 
+  and     Expr ::= Expr (*) GTE Expr 
+  under symbol GTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #55
+  between Expr ::= Expr EQ Expr (*) 
+  and     Expr ::= Expr (*) EQ Expr 
+  under symbol EQ
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #55
+  between Expr ::= Expr EQ Expr (*) 
+  and     Expr ::= Expr (*) LTGT Expr 
+  under symbol LTGT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #55
+  between Expr ::= Expr EQ Expr (*) 
+  and     Expr ::= Expr (*) LOR Expr 
+  under symbol LOR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #55
+  between Expr ::= Expr EQ Expr (*) 
+  and     Expr ::= Expr (*) LAND Expr 
+  under symbol LAND
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #50
+  between Expr ::= Expr MUL Expr (*) 
+  and     Expr ::= Expr (*) ADD Expr 
+  under symbol ADD
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #50
+  between Expr ::= Expr MUL Expr (*) 
+  and     Expr ::= Expr (*) SUB Expr 
+  under symbol SUB
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #50
+  between Expr ::= Expr MUL Expr (*) 
+  and     Expr ::= Expr (*) MUL Expr 
+  under symbol MUL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #50
+  between Expr ::= Expr MUL Expr (*) 
+  and     Expr ::= Expr (*) DIV Expr 
+  under symbol DIV
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #50
+  between Expr ::= Expr MUL Expr (*) 
+  and     Expr ::= Expr (*) LT Expr 
+  under symbol LT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #50
+  between Expr ::= Expr MUL Expr (*) 
+  and     Expr ::= Expr (*) GT Expr 
+  under symbol GT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #50
+  between Expr ::= Expr MUL Expr (*) 
+  and     Expr ::= Expr (*) LTE Expr 
+  under symbol LTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #50
+  between Expr ::= Expr MUL Expr (*) 
+  and     Expr ::= Expr (*) GTE Expr 
+  under symbol GTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #50
+  between Expr ::= Expr MUL Expr (*) 
+  and     Expr ::= Expr (*) EQ Expr 
+  under symbol EQ
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #50
+  between Expr ::= Expr MUL Expr (*) 
+  and     Expr ::= Expr (*) LTGT Expr 
+  under symbol LTGT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #50
+  between Expr ::= Expr MUL Expr (*) 
+  and     Expr ::= Expr (*) LOR Expr 
+  under symbol LOR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #50
+  between Expr ::= Expr MUL Expr (*) 
+  and     Expr ::= Expr (*) LAND Expr 
+  under symbol LAND
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #60
+  between Expr ::= Expr LTGT Expr (*) 
+  and     Expr ::= Expr (*) ADD Expr 
+  under symbol ADD
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #60
+  between Expr ::= Expr LTGT Expr (*) 
+  and     Expr ::= Expr (*) SUB Expr 
+  under symbol SUB
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #60
+  between Expr ::= Expr LTGT Expr (*) 
+  and     Expr ::= Expr (*) MUL Expr 
+  under symbol MUL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #60
+  between Expr ::= Expr LTGT Expr (*) 
+  and     Expr ::= Expr (*) DIV Expr 
+  under symbol DIV
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #60
+  between Expr ::= Expr LTGT Expr (*) 
+  and     Expr ::= Expr (*) LT Expr 
+  under symbol LT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #60
+  between Expr ::= Expr LTGT Expr (*) 
+  and     Expr ::= Expr (*) GT Expr 
+  under symbol GT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #60
+  between Expr ::= Expr LTGT Expr (*) 
+  and     Expr ::= Expr (*) LTE Expr 
+  under symbol LTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #60
+  between Expr ::= Expr LTGT Expr (*) 
+  and     Expr ::= Expr (*) GTE Expr 
+  under symbol GTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #60
+  between Expr ::= Expr LTGT Expr (*) 
+  and     Expr ::= Expr (*) EQ Expr 
+  under symbol EQ
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #60
+  between Expr ::= Expr LTGT Expr (*) 
+  and     Expr ::= Expr (*) LTGT Expr 
+  under symbol LTGT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #60
+  between Expr ::= Expr LTGT Expr (*) 
+  and     Expr ::= Expr (*) LOR Expr 
+  under symbol LOR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #60
+  between Expr ::= Expr LTGT Expr (*) 
+  and     Expr ::= Expr (*) LAND Expr 
+  under symbol LAND
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #52
+  between Expr ::= Expr DIV Expr (*) 
+  and     Expr ::= Expr (*) ADD Expr 
+  under symbol ADD
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #52
+  between Expr ::= Expr DIV Expr (*) 
+  and     Expr ::= Expr (*) SUB Expr 
+  under symbol SUB
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #52
+  between Expr ::= Expr DIV Expr (*) 
+  and     Expr ::= Expr (*) MUL Expr 
+  under symbol MUL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #52
+  between Expr ::= Expr DIV Expr (*) 
+  and     Expr ::= Expr (*) DIV Expr 
+  under symbol DIV
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #52
+  between Expr ::= Expr DIV Expr (*) 
+  and     Expr ::= Expr (*) LT Expr 
+  under symbol LT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #52
+  between Expr ::= Expr DIV Expr (*) 
+  and     Expr ::= Expr (*) GT Expr 
+  under symbol GT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #52
+  between Expr ::= Expr DIV Expr (*) 
+  and     Expr ::= Expr (*) LTE Expr 
+  under symbol LTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #52
+  between Expr ::= Expr DIV Expr (*) 
+  and     Expr ::= Expr (*) GTE Expr 
+  under symbol GTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #52
+  between Expr ::= Expr DIV Expr (*) 
+  and     Expr ::= Expr (*) EQ Expr 
+  under symbol EQ
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #52
+  between Expr ::= Expr DIV Expr (*) 
+  and     Expr ::= Expr (*) LTGT Expr 
+  under symbol LTGT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #52
+  between Expr ::= Expr DIV Expr (*) 
+  and     Expr ::= Expr (*) LOR Expr 
+  under symbol LOR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #52
+  between Expr ::= Expr DIV Expr (*) 
+  and     Expr ::= Expr (*) LAND Expr 
+  under symbol LAND
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #56
+  between Expr ::= Expr LOR Expr (*) 
+  and     Expr ::= Expr (*) ADD Expr 
+  under symbol ADD
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #56
+  between Expr ::= Expr LOR Expr (*) 
+  and     Expr ::= Expr (*) SUB Expr 
+  under symbol SUB
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #56
+  between Expr ::= Expr LOR Expr (*) 
+  and     Expr ::= Expr (*) MUL Expr 
+  under symbol MUL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #56
+  between Expr ::= Expr LOR Expr (*) 
+  and     Expr ::= Expr (*) DIV Expr 
+  under symbol DIV
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #56
+  between Expr ::= Expr LOR Expr (*) 
+  and     Expr ::= Expr (*) LT Expr 
+  under symbol LT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #56
+  between Expr ::= Expr LOR Expr (*) 
+  and     Expr ::= Expr (*) GT Expr 
+  under symbol GT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #56
+  between Expr ::= Expr LOR Expr (*) 
+  and     Expr ::= Expr (*) LTE Expr 
+  under symbol LTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #56
+  between Expr ::= Expr LOR Expr (*) 
+  and     Expr ::= Expr (*) GTE Expr 
+  under symbol GTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #56
+  between Expr ::= Expr LOR Expr (*) 
+  and     Expr ::= Expr (*) EQ Expr 
+  under symbol EQ
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #56
+  between Expr ::= Expr LOR Expr (*) 
+  and     Expr ::= Expr (*) LTGT Expr 
+  under symbol LTGT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #56
+  between Expr ::= Expr LOR Expr (*) 
+  and     Expr ::= Expr (*) LOR Expr 
+  under symbol LOR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #56
+  between Expr ::= Expr LOR Expr (*) 
+  and     Expr ::= Expr (*) LAND Expr 
+  under symbol LAND
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #54
+  between Expr ::= Expr ADD Expr (*) 
+  and     Expr ::= Expr (*) ADD Expr 
+  under symbol ADD
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #54
+  between Expr ::= Expr ADD Expr (*) 
+  and     Expr ::= Expr (*) SUB Expr 
+  under symbol SUB
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #54
+  between Expr ::= Expr ADD Expr (*) 
+  and     Expr ::= Expr (*) MUL Expr 
+  under symbol MUL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #54
+  between Expr ::= Expr ADD Expr (*) 
+  and     Expr ::= Expr (*) DIV Expr 
+  under symbol DIV
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #54
+  between Expr ::= Expr ADD Expr (*) 
+  and     Expr ::= Expr (*) LT Expr 
+  under symbol LT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #54
+  between Expr ::= Expr ADD Expr (*) 
+  and     Expr ::= Expr (*) GT Expr 
+  under symbol GT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #54
+  between Expr ::= Expr ADD Expr (*) 
+  and     Expr ::= Expr (*) LTE Expr 
+  under symbol LTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #54
+  between Expr ::= Expr ADD Expr (*) 
+  and     Expr ::= Expr (*) GTE Expr 
+  under symbol GTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #54
+  between Expr ::= Expr ADD Expr (*) 
+  and     Expr ::= Expr (*) EQ Expr 
+  under symbol EQ
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #54
+  between Expr ::= Expr ADD Expr (*) 
+  and     Expr ::= Expr (*) LTGT Expr 
+  under symbol LTGT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #54
+  between Expr ::= Expr ADD Expr (*) 
+  and     Expr ::= Expr (*) LOR Expr 
+  under symbol LOR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #54
+  between Expr ::= Expr ADD Expr (*) 
+  and     Expr ::= Expr (*) LAND Expr 
+  under symbol LAND
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #58
+  between Expr ::= Expr LAND Expr (*) 
+  and     Expr ::= Expr (*) ADD Expr 
+  under symbol ADD
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #58
+  between Expr ::= Expr LAND Expr (*) 
+  and     Expr ::= Expr (*) SUB Expr 
+  under symbol SUB
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #58
+  between Expr ::= Expr LAND Expr (*) 
+  and     Expr ::= Expr (*) MUL Expr 
+  under symbol MUL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #58
+  between Expr ::= Expr LAND Expr (*) 
+  and     Expr ::= Expr (*) DIV Expr 
+  under symbol DIV
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #58
+  between Expr ::= Expr LAND Expr (*) 
+  and     Expr ::= Expr (*) LT Expr 
+  under symbol LT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #58
+  between Expr ::= Expr LAND Expr (*) 
+  and     Expr ::= Expr (*) GT Expr 
+  under symbol GT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #58
+  between Expr ::= Expr LAND Expr (*) 
+  and     Expr ::= Expr (*) LTE Expr 
+  under symbol LTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #58
+  between Expr ::= Expr LAND Expr (*) 
+  and     Expr ::= Expr (*) GTE Expr 
+  under symbol GTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #58
+  between Expr ::= Expr LAND Expr (*) 
+  and     Expr ::= Expr (*) EQ Expr 
+  under symbol EQ
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #58
+  between Expr ::= Expr LAND Expr (*) 
+  and     Expr ::= Expr (*) LTGT Expr 
+  under symbol LTGT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #58
+  between Expr ::= Expr LAND Expr (*) 
+  and     Expr ::= Expr (*) LOR Expr 
+  under symbol LOR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #58
+  between Expr ::= Expr LAND Expr (*) 
+  and     Expr ::= Expr (*) LAND Expr 
+  under symbol LAND
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #53
+  between Expr ::= Expr SUB Expr (*) 
+  and     Expr ::= Expr (*) ADD Expr 
+  under symbol ADD
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #53
+  between Expr ::= Expr SUB Expr (*) 
+  and     Expr ::= Expr (*) SUB Expr 
+  under symbol SUB
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #53
+  between Expr ::= Expr SUB Expr (*) 
+  and     Expr ::= Expr (*) MUL Expr 
+  under symbol MUL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #53
+  between Expr ::= Expr SUB Expr (*) 
+  and     Expr ::= Expr (*) DIV Expr 
+  under symbol DIV
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #53
+  between Expr ::= Expr SUB Expr (*) 
+  and     Expr ::= Expr (*) LT Expr 
+  under symbol LT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #53
+  between Expr ::= Expr SUB Expr (*) 
+  and     Expr ::= Expr (*) GT Expr 
+  under symbol GT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #53
+  between Expr ::= Expr SUB Expr (*) 
+  and     Expr ::= Expr (*) LTE Expr 
+  under symbol LTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #53
+  between Expr ::= Expr SUB Expr (*) 
+  and     Expr ::= Expr (*) GTE Expr 
+  under symbol GTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #53
+  between Expr ::= Expr SUB Expr (*) 
+  and     Expr ::= Expr (*) EQ Expr 
+  under symbol EQ
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #53
+  between Expr ::= Expr SUB Expr (*) 
+  and     Expr ::= Expr (*) LTGT Expr 
+  under symbol LTGT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #53
+  between Expr ::= Expr SUB Expr (*) 
+  and     Expr ::= Expr (*) LOR Expr 
+  under symbol LOR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #53
+  between Expr ::= Expr SUB Expr (*) 
+  and     Expr ::= Expr (*) LAND Expr 
+  under symbol LAND
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #49
+  between Expr ::= Expr LT Expr (*) 
+  and     Expr ::= Expr (*) ADD Expr 
+  under symbol ADD
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #49
+  between Expr ::= Expr LT Expr (*) 
+  and     Expr ::= Expr (*) SUB Expr 
+  under symbol SUB
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #49
+  between Expr ::= Expr LT Expr (*) 
+  and     Expr ::= Expr (*) MUL Expr 
+  under symbol MUL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #49
+  between Expr ::= Expr LT Expr (*) 
+  and     Expr ::= Expr (*) DIV Expr 
+  under symbol DIV
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #49
+  between Expr ::= Expr LT Expr (*) 
+  and     Expr ::= Expr (*) LT Expr 
+  under symbol LT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #49
+  between Expr ::= Expr LT Expr (*) 
+  and     Expr ::= Expr (*) GT Expr 
+  under symbol GT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #49
+  between Expr ::= Expr LT Expr (*) 
+  and     Expr ::= Expr (*) LTE Expr 
+  under symbol LTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #49
+  between Expr ::= Expr LT Expr (*) 
+  and     Expr ::= Expr (*) GTE Expr 
+  under symbol GTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #49
+  between Expr ::= Expr LT Expr (*) 
+  and     Expr ::= Expr (*) EQ Expr 
+  under symbol EQ
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #49
+  between Expr ::= Expr LT Expr (*) 
+  and     Expr ::= Expr (*) LTGT Expr 
+  under symbol LTGT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #49
+  between Expr ::= Expr LT Expr (*) 
+  and     Expr ::= Expr (*) LOR Expr 
+  under symbol LOR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #49
+  between Expr ::= Expr LT Expr (*) 
+  and     Expr ::= Expr (*) LAND Expr 
+  under symbol LAND
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #79
+  between Expr ::= TILDE Expr (*) 
+  and     Expr ::= Expr (*) ADD Expr 
+  under symbol ADD
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #79
+  between Expr ::= TILDE Expr (*) 
+  and     Expr ::= Expr (*) SUB Expr 
+  under symbol SUB
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #79
+  between Expr ::= TILDE Expr (*) 
+  and     Expr ::= Expr (*) MUL Expr 
+  under symbol MUL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #79
+  between Expr ::= TILDE Expr (*) 
+  and     Expr ::= Expr (*) DIV Expr 
+  under symbol DIV
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #79
+  between Expr ::= TILDE Expr (*) 
+  and     Expr ::= Expr (*) LT Expr 
+  under symbol LT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #79
+  between Expr ::= TILDE Expr (*) 
+  and     Expr ::= Expr (*) GT Expr 
+  under symbol GT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #79
+  between Expr ::= TILDE Expr (*) 
+  and     Expr ::= Expr (*) LTE Expr 
+  under symbol LTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #79
+  between Expr ::= TILDE Expr (*) 
+  and     Expr ::= Expr (*) GTE Expr 
+  under symbol GTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #79
+  between Expr ::= TILDE Expr (*) 
+  and     Expr ::= Expr (*) EQ Expr 
+  under symbol EQ
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #79
+  between Expr ::= TILDE Expr (*) 
+  and     Expr ::= Expr (*) LTGT Expr 
+  under symbol LTGT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #79
+  between Expr ::= TILDE Expr (*) 
+  and     Expr ::= Expr (*) LOR Expr 
+  under symbol LOR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #79
+  between Expr ::= TILDE Expr (*) 
+  and     Expr ::= Expr (*) LAND Expr 
+  under symbol LAND
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #51
+  between Expr ::= Expr GT Expr (*) 
+  and     Expr ::= Expr (*) ADD Expr 
+  under symbol ADD
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #51
+  between Expr ::= Expr GT Expr (*) 
+  and     Expr ::= Expr (*) SUB Expr 
+  under symbol SUB
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #51
+  between Expr ::= Expr GT Expr (*) 
+  and     Expr ::= Expr (*) MUL Expr 
+  under symbol MUL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #51
+  between Expr ::= Expr GT Expr (*) 
+  and     Expr ::= Expr (*) DIV Expr 
+  under symbol DIV
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #51
+  between Expr ::= Expr GT Expr (*) 
+  and     Expr ::= Expr (*) LT Expr 
+  under symbol LT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #51
+  between Expr ::= Expr GT Expr (*) 
+  and     Expr ::= Expr (*) GT Expr 
+  under symbol GT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #51
+  between Expr ::= Expr GT Expr (*) 
+  and     Expr ::= Expr (*) LTE Expr 
+  under symbol LTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #51
+  between Expr ::= Expr GT Expr (*) 
+  and     Expr ::= Expr (*) GTE Expr 
+  under symbol GTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #51
+  between Expr ::= Expr GT Expr (*) 
+  and     Expr ::= Expr (*) EQ Expr 
+  under symbol EQ
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #51
+  between Expr ::= Expr GT Expr (*) 
+  and     Expr ::= Expr (*) LTGT Expr 
+  under symbol LTGT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #51
+  between Expr ::= Expr GT Expr (*) 
+  and     Expr ::= Expr (*) LOR Expr 
+  under symbol LOR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #51
+  between Expr ::= Expr GT Expr (*) 
+  and     Expr ::= Expr (*) LAND Expr 
+  under symbol LAND
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #77
+  between Expr ::= SUB Expr (*) 
+  and     Expr ::= Expr (*) ADD Expr 
+  under symbol ADD
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #77
+  between Expr ::= SUB Expr (*) 
+  and     Expr ::= Expr (*) SUB Expr 
+  under symbol SUB
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #77
+  between Expr ::= SUB Expr (*) 
+  and     Expr ::= Expr (*) MUL Expr 
+  under symbol MUL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #77
+  between Expr ::= SUB Expr (*) 
+  and     Expr ::= Expr (*) DIV Expr 
+  under symbol DIV
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #77
+  between Expr ::= SUB Expr (*) 
+  and     Expr ::= Expr (*) LT Expr 
+  under symbol LT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #77
+  between Expr ::= SUB Expr (*) 
+  and     Expr ::= Expr (*) GT Expr 
+  under symbol GT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #77
+  between Expr ::= SUB Expr (*) 
+  and     Expr ::= Expr (*) LTE Expr 
+  under symbol LTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #77
+  between Expr ::= SUB Expr (*) 
+  and     Expr ::= Expr (*) GTE Expr 
+  under symbol GTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #77
+  between Expr ::= SUB Expr (*) 
+  and     Expr ::= Expr (*) EQ Expr 
+  under symbol EQ
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #77
+  between Expr ::= SUB Expr (*) 
+  and     Expr ::= Expr (*) LTGT Expr 
+  under symbol LTGT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #77
+  between Expr ::= SUB Expr (*) 
+  and     Expr ::= Expr (*) LOR Expr 
+  under symbol LOR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #77
+  between Expr ::= SUB Expr (*) 
+  and     Expr ::= Expr (*) LAND Expr 
+  under symbol LAND
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #57
+  between Expr ::= Expr LTE Expr (*) 
+  and     Expr ::= Expr (*) ADD Expr 
+  under symbol ADD
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #57
+  between Expr ::= Expr LTE Expr (*) 
+  and     Expr ::= Expr (*) SUB Expr 
+  under symbol SUB
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #57
+  between Expr ::= Expr LTE Expr (*) 
+  and     Expr ::= Expr (*) MUL Expr 
+  under symbol MUL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #57
+  between Expr ::= Expr LTE Expr (*) 
+  and     Expr ::= Expr (*) DIV Expr 
+  under symbol DIV
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #57
+  between Expr ::= Expr LTE Expr (*) 
+  and     Expr ::= Expr (*) LT Expr 
+  under symbol LT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #57
+  between Expr ::= Expr LTE Expr (*) 
+  and     Expr ::= Expr (*) GT Expr 
+  under symbol GT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #57
+  between Expr ::= Expr LTE Expr (*) 
+  and     Expr ::= Expr (*) LTE Expr 
+  under symbol LTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #57
+  between Expr ::= Expr LTE Expr (*) 
+  and     Expr ::= Expr (*) GTE Expr 
+  under symbol GTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #57
+  between Expr ::= Expr LTE Expr (*) 
+  and     Expr ::= Expr (*) EQ Expr 
+  under symbol EQ
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #57
+  between Expr ::= Expr LTE Expr (*) 
+  and     Expr ::= Expr (*) LTGT Expr 
+  under symbol LTGT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #57
+  between Expr ::= Expr LTE Expr (*) 
+  and     Expr ::= Expr (*) LOR Expr 
+  under symbol LOR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #57
+  between Expr ::= Expr LTE Expr (*) 
+  and     Expr ::= Expr (*) LAND Expr 
+  under symbol LAND
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #78
+  between Expr ::= ADD Expr (*) 
+  and     Expr ::= Expr (*) ADD Expr 
+  under symbol ADD
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #78
+  between Expr ::= ADD Expr (*) 
+  and     Expr ::= Expr (*) SUB Expr 
+  under symbol SUB
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #78
+  between Expr ::= ADD Expr (*) 
+  and     Expr ::= Expr (*) MUL Expr 
+  under symbol MUL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #78
+  between Expr ::= ADD Expr (*) 
+  and     Expr ::= Expr (*) DIV Expr 
+  under symbol DIV
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #78
+  between Expr ::= ADD Expr (*) 
+  and     Expr ::= Expr (*) LT Expr 
+  under symbol LT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #78
+  between Expr ::= ADD Expr (*) 
+  and     Expr ::= Expr (*) GT Expr 
+  under symbol GT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #78
+  between Expr ::= ADD Expr (*) 
+  and     Expr ::= Expr (*) LTE Expr 
+  under symbol LTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #78
+  between Expr ::= ADD Expr (*) 
+  and     Expr ::= Expr (*) GTE Expr 
+  under symbol GTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #78
+  between Expr ::= ADD Expr (*) 
+  and     Expr ::= Expr (*) EQ Expr 
+  under symbol EQ
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #78
+  between Expr ::= ADD Expr (*) 
+  and     Expr ::= Expr (*) LTGT Expr 
+  under symbol LTGT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #78
+  between Expr ::= ADD Expr (*) 
+  and     Expr ::= Expr (*) LOR Expr 
+  under symbol LOR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #78
+  between Expr ::= ADD Expr (*) 
+  and     Expr ::= Expr (*) LAND Expr 
+  under symbol LAND
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #59
+  between Expr ::= Expr GTE Expr (*) 
+  and     Expr ::= Expr (*) ADD Expr 
+  under symbol ADD
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #59
+  between Expr ::= Expr GTE Expr (*) 
+  and     Expr ::= Expr (*) SUB Expr 
+  under symbol SUB
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #59
+  between Expr ::= Expr GTE Expr (*) 
+  and     Expr ::= Expr (*) MUL Expr 
+  under symbol MUL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #59
+  between Expr ::= Expr GTE Expr (*) 
+  and     Expr ::= Expr (*) DIV Expr 
+  under symbol DIV
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #59
+  between Expr ::= Expr GTE Expr (*) 
+  and     Expr ::= Expr (*) LT Expr 
+  under symbol LT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #59
+  between Expr ::= Expr GTE Expr (*) 
+  and     Expr ::= Expr (*) GT Expr 
+  under symbol GT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #59
+  between Expr ::= Expr GTE Expr (*) 
+  and     Expr ::= Expr (*) LTE Expr 
+  under symbol LTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #59
+  between Expr ::= Expr GTE Expr (*) 
+  and     Expr ::= Expr (*) GTE Expr 
+  under symbol GTE
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #59
+  between Expr ::= Expr GTE Expr (*) 
+  and     Expr ::= Expr (*) EQ Expr 
+  under symbol EQ
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #59
+  between Expr ::= Expr GTE Expr (*) 
+  and     Expr ::= Expr (*) LTGT Expr 
+  under symbol LTGT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #59
+  between Expr ::= Expr GTE Expr (*) 
+  and     Expr ::= Expr (*) LOR Expr 
+  under symbol LOR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #59
+  between Expr ::= Expr GTE Expr (*) 
+  and     Expr ::= Expr (*) LAND Expr 
+  under symbol LAND
+  Resolved in favor of shifting.
+
+Error : *** More conflicts encountered than expected -- parser generation aborted
+------- CUP v0.11b 20160615 (GIT 4ac7450) Parser Generation Summary -------
+  1 error and 197 warnings
+  51 terminals, 12 non-terminals, and 62 productions declared, 
+  producing 135 unique parse states.
+  5 terminals declared but not used.
+  0 non-terminals declared but not used.
+  0 productions never reduced.
+  192 conflicts detected (0 expected).
+  No code produced.
+---------------------------------------------------- (CUP v0.11b 20160615 (GIT 4ac7450))
+[exit code 100]

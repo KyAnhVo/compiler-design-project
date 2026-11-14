@@ -1,0 +1,61 @@
+$ java -jar java-cup-11b.jar -interface -destdir variants/09-memberdecls-as-spec/build variants/09-memberdecls-as-spec/grammar.cup
+Warning : *** Shift/Reduce conflict found in state #4
+  between Fielddecls ::= (*) 
+  and     Type ::= (*) INT 
+  under symbol INT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #4
+  between Fielddecls ::= (*) 
+  and     Type ::= (*) CHAR 
+  under symbol CHAR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #4
+  between Fielddecls ::= (*) 
+  and     Type ::= (*) BOOL 
+  under symbol BOOL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #4
+  between Fielddecls ::= (*) 
+  and     Type ::= (*) FLOAT 
+  under symbol FLOAT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #9
+  between Fielddecls ::= (*) 
+  and     Type ::= (*) INT 
+  under symbol INT
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #9
+  between Fielddecls ::= (*) 
+  and     Type ::= (*) CHAR 
+  under symbol CHAR
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #9
+  between Fielddecls ::= (*) 
+  and     Type ::= (*) BOOL 
+  under symbol BOOL
+  Resolved in favor of shifting.
+
+Warning : *** Shift/Reduce conflict found in state #9
+  between Fielddecls ::= (*) 
+  and     Type ::= (*) FLOAT 
+  under symbol FLOAT
+  Resolved in favor of shifting.
+
+Error : *** More conflicts encountered than expected -- parser generation aborted
+------- CUP v0.11b 20160615 (GIT 4ac7450) Parser Generation Summary -------
+  1 error and 8 warnings
+  52 terminals, 21 non-terminals, and 80 productions declared, 
+  producing 183 unique parse states.
+  0 terminals declared but not used.
+  0 non-terminals declared but not used.
+  0 productions never reduced.
+  8 conflicts detected (0 expected).
+  No code produced.
+---------------------------------------------------- (CUP v0.11b 20160615 (GIT 4ac7450))
+[exit code 100]

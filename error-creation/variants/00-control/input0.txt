@@ -1,0 +1,1 @@
+class c { void m() { x = 1 + 2 * 3; } }

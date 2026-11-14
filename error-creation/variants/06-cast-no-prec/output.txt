@@ -1,0 +1,30 @@
+$ java -jar java-cup-11b.jar -interface -destdir variants/06-cast-no-prec/build variants/06-cast-no-prec/grammar.cup
+Warning : Terminal "CAST" was declared but never used
+Warning : Terminal "CLASS" was declared but never used
+Warning : Terminal "VOID" was declared but never used
+Warning : Terminal "FINAL" was declared but never used
+------- CUP v0.11b 20160615 (GIT 4ac7450) Parser Generation Summary -------
+  0 errors and 4 warnings
+  51 terminals, 12 non-terminals, and 62 productions declared, 
+  producing 135 unique parse states.
+  4 terminals declared but not used.
+  0 non-terminals declared but not used.
+  0 productions never reduced.
+  0 conflicts detected (0 expected).
+  Code written to "parser.java", and "sym.java".
+---------------------------------------------------- (CUP v0.11b 20160615 (GIT 4ac7450))
+[exit code 0]
+
+$ java -jar jflex-full-1.8.2.jar --nobak -d variants/06-cast-no-prec/build tokens.jflex
+Reading "tokens.jflex"
+Constructing NFA : 290 states in NFA
+Converting NFA to DFA : 
+.....................................................................................................................
+119 states before minimization, 111 states in minimized DFA
+Writing code to "variants/06-cast-no-prec/build/Lexer.java"
+[exit code 0]
+
+$ javac --release 11 -cp java-cup-11b.jar -d variants/06-cast-no-prec/build <generated sources> ScannerTest.java ast/*.java
+Note: ScannerTest.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+[exit code 0]

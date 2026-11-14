@@ -1,0 +1,19 @@
+$ java -jar java-cup-11b.jar -interface -destdir variants/12-dangling-else/build variants/12-dangling-else/grammar.cup
+Warning : *** Shift/Reduce conflict found in state #132
+  between IfEnd ::= (*) 
+  and     IfEnd ::= (*) ELSE Stmt 
+  under symbol ELSE
+  Resolved in favor of shifting.
+
+Error : *** More conflicts encountered than expected -- parser generation aborted
+------- CUP v0.11b 20160615 (GIT 4ac7450) Parser Generation Summary -------
+  1 error and 1 warning
+  51 terminals, 21 non-terminals, and 81 productions declared, 
+  producing 186 unique parse states.
+  0 terminals declared but not used.
+  0 non-terminals declared but not used.
+  0 productions never reduced.
+  1 conflict detected (0 expected).
+  No code produced.
+---------------------------------------------------- (CUP v0.11b 20160615 (GIT 4ac7450))
+[exit code 100]

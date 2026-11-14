@@ -1,0 +1,205 @@
+import java_cup.runtime.*;
+import java.util.LinkedList;
+
+/**
+Place Terminals Here
+*/
+
+/* Keywords */
+terminal CLASS, FINAL, VOID, INT, CHAR, BOOL, FLOAT,
+IF, WHILE, READ, PRINT, PRINTLINE, RETURN, ELSE;
+
+/* Brace, bracket, paren */
+terminal LBRACE, RBRACE, LBRACKET, RBRACKET, LPAREN, RPAREN;
+
+/* Operators and Punctuations (I think) */
+terminal SEMICOLON, INCREMENT, DECREMENT, ASSIGN, COMMA,
+QUESTION_MARK, COLON, TILDE, ADD, SUB, MUL, DIV, 
+LT, GT, LTE, GTE, EQ, LTGT, LOR, LAND;
+
+/* ID and literals */
+terminal String ID, STRLIT, CHARLIT, INTLIT, FLOATLIT;
+terminal TRUE, FALSE; /* bool lit */
+
+/* Never returned by the lexer, only used to name precedence levels */
+terminal CAST, UNARY, NO_ELSE;
+
+non terminal Program Program;
+non terminal LinkedList<Node> Memberdecls, Methoddecls;
+non terminal LinkedList<FieldDecl> Fielddecls;
+non terminal FieldDecl Fielddecl;
+non terminal MethodDecl Methoddecl;
+non terminal Expr Optionalexpr;
+non terminal LinkedList<ArgDecl> Argdecls, ArgdeclList;
+non terminal ArgDecl Argdecl;
+non terminal LinkedList<Stmt> Stmts;
+non terminal Stmt Stmt, IfEnd;
+non terminal Name Name;
+non terminal LinkedList<Expr> Args, Printlist, Printlinelist;
+non terminal LinkedList<Name> Readlist;
+non terminal Expr Expr;
+non terminal String Type;
+non terminal Boolean Optionalsemi;
+
+/*
+ * Lowest to highest. NO_ELSE < ELSE settles the dangling else: on seeing an
+ * else, shift it onto the nearest if rather than reduce IfEnd to empty.
+ * Binaryop is inlined into Expr below: CUP takes a rule's
+ * precedence from its last terminal, and "Expr Binaryop Expr" would have none.
+ */
+precedence nonassoc NO_ELSE;
+precedence nonassoc ELSE;
+precedence left LOR;
+precedence left LAND;
+precedence left EQ, LTGT;
+precedence left LT, GT, LTE, GTE;
+precedence left ADD, SUB;
+precedence left MUL, DIV;
+precedence right CAST;
+precedence right UNARY;
+
+start with Program;
+
+Program ::= CLASS ID:i LBRACE Memberdecls:m RBRACE {: RESULT = new ClassProgram(i, m); :} ;
+
+/*
+ * Written as "Fielddecls Methoddecls" this conflicts: on seeing "int" the parser
+ * would have to choose between shifting a field and reducing Fielddecls to empty,
+ * but only the "(" two tokens later tells a field from a method. Here nothing is
+ * reduced until that "(" has been seen, and fields still have to precede methods.
+ */
+Memberdecls ::= Fielddecl:f Memberdecls:rest {: rest.addFirst(f); RESULT = rest; :}
+              | Methoddecls:m {: RESULT = m; :}
+              ;
+
+Methoddecls ::= Methoddecl:m Methoddecls:rest {: rest.addFirst(m); RESULT = rest; :}
+              | {: RESULT = new LinkedList<Node>(); :}
+              ;
+
+Fielddecls ::= Fielddecl:f Fielddecls:rest {: rest.addFirst(f); RESULT = rest; :}
+             | {: RESULT = new LinkedList<FieldDecl>(); :}
+             ;
+
+/* Optionalfinal is inlined: reducing it to empty on "int" conflicts with shifting "Type id [ intlit ]" */
+Fielddecl ::= FINAL Type:t ID:i Optionalexpr:e SEMICOLON {: RESULT = FieldDecl.scalar(true, t, i, e); :}
+            | Type:t ID:i Optionalexpr:e SEMICOLON {: RESULT = FieldDecl.scalar(false, t, i, e); :}
+            | Type:t ID:i LBRACKET INTLIT:n RBRACKET SEMICOLON {: RESULT = FieldDecl.array(t, i, n); :}
+            ;
+
+Optionalexpr ::= ASSIGN Expr:e {: RESULT = e; :}
+               | {: RESULT = null; :}
+               ;
+
+/* Returntype is inlined: reducing it from Type on seeing id conflicts with shifting that id as a field */
+Methoddecl ::= Type:t ID:i LPAREN Argdecls:a RPAREN LBRACE Fielddecls:f Stmts:s RBRACE Optionalsemi:semi
+                  {: RESULT = new MethodDecl(t, i, a, f, s, semi); :}
+             | VOID ID:i LPAREN Argdecls:a RPAREN LBRACE Fielddecls:f Stmts:s RBRACE Optionalsemi:semi
+                  {: RESULT = new MethodDecl("void", i, a, f, s, semi); :}
+             ;
+
+Argdecls ::= ArgdeclList:l {: RESULT = l; :}
+           | {: RESULT = new LinkedList<ArgDecl>(); :}
+           ;
+
+ArgdeclList ::= Argdecl:a COMMA ArgdeclList:rest {: rest.addFirst(a); RESULT = rest; :}
+              | Argdecl:a {: RESULT = new LinkedList<ArgDecl>(); RESULT.add(a); :}
+              ;
+
+Argdecl ::= Type:t ID:i {: RESULT = new ArgDecl(t, i, false); :}
+          | Type:t ID:i LBRACKET RBRACKET {: RESULT = new ArgDecl(t, i, true); :}
+          ;
+
+Stmts ::= Stmt:s Stmts:rest {: rest.addFirst(s); RESULT = rest; :}
+        | {: RESULT = new LinkedList<Stmt>(); :}
+        ;
+
+Stmt ::= IF LPAREN Expr:c RPAREN Stmt:s IfEnd:e
+            {: RESULT = new IfStmt(c, s, e); :}
+       | WHILE LPAREN Expr:c RPAREN Stmt:s
+            {: RESULT = new WhileStmt(c, s); :}
+       | Name:n ASSIGN Expr:e SEMICOLON
+            {: RESULT = new AssignStmt(n, e); :}
+       | READ LPAREN Readlist:l RPAREN SEMICOLON
+            {: RESULT = new IoStmt("read", l); :}
+       | PRINT LPAREN Printlist:l RPAREN SEMICOLON
+            {: RESULT = new IoStmt("print", l); :}
+       | PRINTLINE LPAREN Printlinelist:l RPAREN SEMICOLON
+            {: RESULT = new IoStmt("printline", l); :}
+       | ID:i LPAREN RPAREN SEMICOLON
+            {: RESULT = new CallStmt(new CallExpr(i, new LinkedList<Expr>())); :}
+       | ID:i LPAREN Args:a RPAREN SEMICOLON
+            {: RESULT = new CallStmt(new CallExpr(i, a)); :}
+       | RETURN SEMICOLON
+            {: RESULT = new ReturnStmt(null); :}
+       | RETURN Expr:e SEMICOLON
+            {: RESULT = new ReturnStmt(e); :}
+       | Name:n INCREMENT SEMICOLON
+            {: RESULT = new IncDecStmt(n, "++"); :}
+       | Name:n DECREMENT SEMICOLON
+            {: RESULT = new IncDecStmt(n, "--"); :}
+       | LBRACE Fielddecls:f Stmts:s RBRACE Optionalsemi:semi
+            {: RESULT = new Block(f, s, semi); :}
+       ;
+
+IfEnd ::= ELSE Stmt:s {: RESULT = s; :}
+        | {: RESULT = null; :} %prec NO_ELSE
+        ;
+
+Optionalsemi ::= SEMICOLON {: RESULT = true; :}
+               | {: RESULT = false; :}
+               ;
+
+Name ::= ID:i {: RESULT = new Name(i, null); :}
+       | ID:i LBRACKET Expr:e RBRACKET {: RESULT = new Name(i, e); :}
+       ;
+
+Args ::= Expr:e COMMA Args:rest {: rest.addFirst(e); RESULT = rest; :}
+       | Expr:e {: RESULT = new LinkedList<Expr>(); RESULT.add(e); :}
+       ;
+
+Readlist ::= Name:n COMMA Readlist:rest {: rest.addFirst(n); RESULT = rest; :}
+           | Name:n {: RESULT = new LinkedList<Name>(); RESULT.add(n); :}
+           ;
+
+Printlist ::= Expr:e COMMA Printlist:rest {: rest.addFirst(e); RESULT = rest; :}
+            | Expr:e {: RESULT = new LinkedList<Expr>(); RESULT.add(e); :}
+            ;
+
+Printlinelist ::= Printlist:l {: RESULT = l; :}
+                | {: RESULT = new LinkedList<Expr>(); :}
+                ;
+
+Expr ::= Name:n {: RESULT = n; :}
+       | ID:i LPAREN RPAREN {: RESULT = new CallExpr(i, new LinkedList<Expr>()); :}
+       | ID:i LPAREN Args:a RPAREN {: RESULT = new CallExpr(i, a); :}
+       | INTLIT:l {: RESULT = new Literal(l); :}
+       | CHARLIT:l {: RESULT = new Literal(l); :}
+       | STRLIT:l {: RESULT = new Literal(l); :}
+       | FLOATLIT:l {: RESULT = new Literal(l); :}
+       | TRUE {: RESULT = new Literal("true"); :}
+       | FALSE {: RESULT = new Literal("false"); :}
+       | LPAREN Expr:e RPAREN {: RESULT = new ParenExpr(e); :}
+       | TILDE Expr:e {: RESULT = new UnaryExpr("~", e); :} %prec UNARY
+       | SUB Expr:e {: RESULT = new UnaryExpr("-", e); :} %prec UNARY
+       | ADD Expr:e {: RESULT = new UnaryExpr("+", e); :} %prec UNARY
+       | LPAREN Type:t RPAREN Expr:e {: RESULT = new CastExpr(t, e); :} %prec CAST
+       | Expr:l MUL Expr:r {: RESULT = new BinaryExpr(l, "*", r); :}
+       | Expr:l DIV Expr:r {: RESULT = new BinaryExpr(l, "/", r); :}
+       | Expr:l ADD Expr:r {: RESULT = new BinaryExpr(l, "+", r); :}
+       | Expr:l SUB Expr:r {: RESULT = new BinaryExpr(l, "-", r); :}
+       | Expr:l LT Expr:r {: RESULT = new BinaryExpr(l, "<", r); :}
+       | Expr:l GT Expr:r {: RESULT = new BinaryExpr(l, ">", r); :}
+       | Expr:l LTE Expr:r {: RESULT = new BinaryExpr(l, "<=", r); :}
+       | Expr:l GTE Expr:r {: RESULT = new BinaryExpr(l, ">=", r); :}
+       | Expr:l EQ Expr:r {: RESULT = new BinaryExpr(l, "==", r); :}
+       | Expr:l LTGT Expr:r {: RESULT = new BinaryExpr(l, "<>", r); :}
+       | Expr:l LOR Expr:r {: RESULT = new BinaryExpr(l, "||", r); :}
+       | Expr:l LAND Expr:r {: RESULT = new BinaryExpr(l, "&&", r); :}
+       | LPAREN Expr:c QUESTION_MARK Expr:a COLON Expr:b RPAREN {: RESULT = new TernaryExpr(c, a, b); :}
+       ;
+
+Type ::= INT {: RESULT = "int"; :}
+       | CHAR {: RESULT = "char"; :}
+       | BOOL {: RESULT = "bool"; :}
+       | FLOAT {: RESULT = "float"; :}
+       ;
